@@ -1,0 +1,12 @@
+---
+// Section heading in the hero's language: the bracketed tag slides in from the side, the display title comes in as masked
+// lines (rising like scene 1, or sliding like scene 2) and the paragraph is revealed line by line (split in scripts/reveal.ts).
+interface Props { tag: string; title: string[]; text?: string; level?: 'h1' | 'h2'; center?: boolean; motion?: 'rise' | 'slide'; id?: string }
+const { tag, title, text, level = 'h2', center = false, motion = 'rise', id } = Astro.props;
+const H = level;
+---
+<div class:list={['sec-head rv', { center }]}>
+  <p class="sec-tag rv-side"><span class="mask"><span>{tag}</span></span></p>
+  <H id={id} class:list={['sec-title rv-lines', motion]}>{title.filter(Boolean).map((l, i) => <span class="mask"><span style={`--d:${0.06 + i * 0.09}s`}>{l}</span>{' '}</span>)}</H>
+  {text && <p class="sec-text" data-split style="--d:.22s">{text}</p>}
+</div>

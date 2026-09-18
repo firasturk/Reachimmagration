@@ -1,0 +1,44 @@
+---
+// Smart Map: a draggable globe (d3-geo on canvas, see scripts/map.ts) driven by the country carousel underneath it.
+// The carousel is the real, accessible control; the globe mirrors it and is hidden from assistive tech.
+import SectionHead from './SectionHead.astro';
+import { ui, type Lang } from '../i18n/ui';
+import { programs } from '../data/site';
+interface Props { lang: Lang }
+const { lang } = Astro.props; const t = ui[lang].map; const home = `/${lang}/`;
+---
+<section class="sec sec-map" id="smart-map" aria-labelledby="mapTitle">
+  <div class="container">
+    <SectionHead tag={t.tag} title={t.title} text={t.text} id="mapTitle" />
+    <div class="chips rv rv-up" role="group" aria-label={t.tag} style="--d:.24s">
+      <button type="button" class="chip" data-filter="all" aria-pressed="true">{t.all} <sup>{programs.length}</sup></button>
+      <button type="button" class="chip" data-filter="citizenship" aria-pressed="false">{t.citizenship} <sup>{programs.filter((p) => p.type === 'citizenship').length}</sup></button>
+      <button type="button" class="chip" data-filter="residency" aria-pressed="false">{t.residency} <sup>{programs.filter((p) => p.type === 'residency').length}</sup></button>
+    </div>
+  </div>
+  <div class="globe-wrap rv rv-up" style="--d:.1s">
+    <canvas id="globe" width="720" height="720" aria-hidden="true"></canvas>
+    <p class="sr-only">{t.globeAlt}</p>
+    <span class="globe-hint" aria-hidden="true"><b></b>{t.hint}</span>
+  </div>
+  <div class="car rv rv-up" id="countryCar" style="--d:.2s">
+    <button type="button" class="car-btn" data-dir="-1" aria-label={t.prev}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg></button>
+    <ul class="car-track" role="list">
+      {programs.map((p) => (
+        <li class="ccard" data-slug={p.slug} data-type={p.type}>
+          <button type="button" class="ccard-hit" aria-pressed="false" aria-label={p[lang]}></button>
+          <p class="ccard-region">{t.regions[p.region]}</p>
+          <h3>{p[lang]}</h3>
+          <p class="ccard-type">{t.types[p.type]}</p>
+          {p.licensed && <p class="badge">{t.licensed}</p>}
+          <div class="ccard-actions">
+            <a class="link-arrow" href={`${home}programs/${p.slug}/`}>{t.view}</a>
+            <a class="link-arrow strong" href="#consult" data-assess={p.slug}>{t.assess}</a>
+          </div>
+        </li>
+      ))}
+    </ul>
+    <button type="button" class="car-btn" data-dir="1" aria-label={t.next}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg></button>
+  </div>
+  <script type="application/json" id="programsData" set:html={JSON.stringify(programs.map((p) => ({ slug: p.slug, iso: p.iso, name: p[lang], lat: p.lat, lng: p.lng, type: p.type })))} />
+</section>

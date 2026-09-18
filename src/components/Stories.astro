@@ -1,0 +1,25 @@
+---
+// Client stories. Quotes are real people's words and come only from data/site.ts `stories` (client-approved copy).
+import SectionHead from './SectionHead.astro';
+import { ui, type Lang } from '../i18n/ui';
+import { stories, SITE } from '../data/site';
+interface Props { lang: Lang }
+const { lang } = Astro.props; const t = ui[lang].stories;
+---
+<section class="sec sec-stories tone-deep" id="stories">
+  <div class="container stories-grid">
+    <SectionHead tag={t.tag} title={t.title} motion="slide" />
+    <div class="story-media rv rv-media"><img src="/images/sections/balcony.webp" alt="" width="1280" height="720" loading="lazy" decoding="async" /></div>
+    <div class="rating rv rv-up" style="--d:.3s">
+      <p class="rating-n">{SITE.google.rating}</p>
+      <p class="rating-stars" aria-hidden="true">★★★★★</p>
+      <p>{SITE.google.reviews} {t.reviews} {t.ratingLabel}</p>
+      <a class="link-arrow" href="https://reachimmigration.com/en/reviews/" rel="noopener" target="_blank">{t.review}</a>
+    </div>
+  </div>
+  {stories.length > 0 && (
+    <ul class="container story-list rv" role="list">
+      {stories.map((s, i) => <li class="story rv-up" style={`--d:${i * 0.08}s`}><blockquote>{s.quote[lang]}</blockquote><p><strong>{s.name}</strong>{s.role && <span> · {s.role}</span>}</p></li>)}
+    </ul>
+  )}
+</section>

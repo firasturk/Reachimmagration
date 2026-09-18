@@ -1,0 +1,65 @@
+---
+// Page shell: SEO head (canonical, hreflang pairs, Open Graph, JSON-LD), fonts, header, footer, country picker.
+import '@fontsource/philosopher/400.css';
+import '@fontsource/philosopher/700.css';
+import '@fontsource-variable/urbanist';
+import '@fontsource-variable/el-messiri';
+import '@fontsource/ibm-plex-sans-arabic/400.css';
+import '@fontsource/ibm-plex-sans-arabic/500.css';
+import '@fontsource/ibm-plex-sans-arabic/600.css';
+import '../styles/global.css';
+import '../styles/hero.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import Footer from '../components/Footer.astro';
+import Picker from '../components/Picker.astro';
+import { ui, dirOf, type Lang } from '../i18n/ui';
+import { SITE, socials } from '../data/site';
+
+interface Props { lang: Lang; title: string; description: string; path: string; overHero?: boolean; jsonld?: object[] }
+const { lang, title, description, path, overHero = false, jsonld = [] } = Astro.props;
+const alt: Lang = lang === 'ar' ? 'en' : 'ar';
+const url = (l: Lang) => new URL(`/${l}${path}`, SITE.url).href;
+const org = {
+  '@context': 'https://schema.org', '@type': 'ProfessionalService', '@id': `${SITE.url}/#org`,
+  name: SITE.name, url: SITE.url, foundingDate: SITE.founded, logo: `${SITE.url}/favicon.svg`,
+  description: ui[lang].meta.description, areaServed: 'Worldwide', address: { '@type': 'PostalAddress', addressLocality: 'Amman', addressCountry: 'JO' },
+  sameAs: socials.map((s) => s.url),
+};
+const website = { '@context': 'https://schema.org', '@type': 'WebSite', '@id': `${SITE.url}/#site`, url: SITE.url, name: SITE.name, inLanguage: ['en', 'ar'], publisher: { '@id': `${SITE.url}/#org` } };
+---
+<!doctype html>
+<html lang={lang} dir={dirOf(lang)}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={url(lang)} />
+    <link rel="alternate" hreflang="en" href={url('en')} />
+    <link rel="alternate" hreflang="ar" href={url('ar')} />
+    <link rel="alternate" hreflang="x-default" href={url('en')} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={url(lang)} />
+    <meta property="og:locale" content={lang === 'ar' ? 'ar_AR' : 'en_US'} />
+    <meta property="og:locale:alternate" content={lang === 'ar' ? 'en_US' : 'ar_AR'} />
+    <meta property="og:image" content={`${SITE.url}/images/hero/still-0.jpg`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#2b2326" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    {overHero && <link rel="preload" as="image" href="/images/hero/still-0.jpg" fetchpriority="high" />}
+    <script is:inline>document.documentElement.classList.add('js')</script>
+    {[org, website, ...jsonld].map((d) => <script type="application/ld+json" set:html={JSON.stringify(d)} />)}
+  </head>
+  <body>
+    <a class="skip" href="#main">{lang === 'ar' ? 'انتقل إلى المحتوى' : 'Skip to content'}</a>
+    <SiteHeader lang={lang} path={path} overHero={overHero} />
+    <main id="main"><slot /></main>
+    <Footer lang={lang} />
+    <Picker lang={lang} />
+    <script>import '../scripts/main.ts';</script>
+  </body>
+</html>

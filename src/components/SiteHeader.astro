@@ -1,0 +1,21 @@
+---
+// Site header. On the home page the hero carries its own nav, so this bar stays hidden until the hero has scrolled away.
+import { ui, type Lang } from '../i18n/ui';
+interface Props { lang: Lang; path: string; overHero: boolean }
+const { lang, path, overHero } = Astro.props;
+const t = ui[lang].header; const alt = lang === 'ar' ? 'en' : 'ar';
+const home = `/${lang}/`;
+const links = [[`${home}programs/`, t.programs], [`${home}#smart-map`, t.map], [`${home}#smart-passport`, t.passport], [`${home}#why-reach`, t.why], [`${home}#consult`, t.contact]];
+---
+<header class="site-header" data-over-hero={overHero ? '1' : undefined}>
+  <div class="container sh-in">
+    <a class="sh-logo" href={home} aria-label={t.home}><b>REACH</b><i>Immigration</i></a>
+    <nav class="sh-nav" aria-label="Primary">{links.map(([h, l]) => <a href={h}>{l}</a>)}</nav>
+    <div class="sh-side">
+      <a class="sh-lang" href={`/${alt}${path}`} lang={alt} hreflang={alt}>{t.lang}</a>
+      <a class="btn btn-solid btn-sm" href={`${home}#consult`}>{t.cta}</a>
+      <button class="sh-burger" type="button" aria-expanded="false" aria-controls="shPanel" aria-label={ui[lang].hero.menu}><i></i><i></i></button>
+    </div>
+  </div>
+  <nav class="sh-panel" id="shPanel" hidden aria-label="Mobile">{links.map(([h, l]) => <a href={h}>{l}</a>)}<a href={`/${alt}${path}`} lang={alt} hreflang={alt}>{t.lang}</a></nav>
+</header>

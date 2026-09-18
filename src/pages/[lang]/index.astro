@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import SmartMap from '../../components/SmartMap.astro';
+import Routes from '../../components/Routes.astro';
+import Film from '../../components/Film.astro';
+import SmartPassport from '../../components/SmartPassport.astro';
+import Why from '../../components/Why.astro';
+import Stories from '../../components/Stories.astro';
+import Licenses from '../../components/Licenses.astro';
+import Insights from '../../components/Insights.astro';
+import Consult from '../../components/Consult.astro';
+import { ui, langs, type Lang } from '../../i18n/ui';
+export const getStaticPaths = () => langs.map((lang) => ({ params: { lang } }));
+const lang = Astro.params.lang as Lang; const t = ui[lang];
+---
+<Base lang={lang} title={t.meta.title} description={t.meta.description} path="/" overHero>
+  <Hero lang={lang} />
+  <SmartMap lang={lang} />
+  <Film lang={lang} />
+  <Routes lang={lang} />
+  <SmartPassport lang={lang} />
+  <Why lang={lang} />
+  <Stories lang={lang} />
+  <Licenses lang={lang} />
+  <Insights lang={lang} />
+  <Consult lang={lang} />
+</Base>

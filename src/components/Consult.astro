@@ -1,0 +1,74 @@
+---
+// Smart consultation form: four short steps instead of one long form. Without JavaScript every step is simply visible.
+// Smart parts (scripts/form.ts): destination arrives pre-filled from the map, the passport or the picker; the branch is
+// suggested from the nationality; the 150,000 USD minimum is asked kindly and never blocks the visitor from leaving details.
+import SectionHead from './SectionHead.astro';
+import { ui, type Lang } from '../i18n/ui';
+import { programs, branches, nationalities } from '../data/site';
+interface Props { lang: Lang }
+const { lang } = Astro.props; const t = ui[lang].consult; const v = ui[lang].vr;
+---
+<section class="sec sec-consult" id="consult" aria-labelledby="consultTitle">
+  <img class="consult-bg" src="/images/sections/emblem.webp" alt="" width="1280" height="720" loading="lazy" decoding="async" />
+  <div class="container consult-grid">
+    <div>
+      <SectionHead tag={t.tag} title={t.title} text={t.text} id="consultTitle" />
+      <aside class="vr-note rv rv-up" style="--d:.35s"><strong>{v.t}</strong> {v.p}</aside>
+    </div>
+    <form class="lead rv rv-up" id="leadForm" action="/api/lead" method="post" novalidate data-lang={lang} style="--d:.12s"
+      data-required={t.required} data-bad-email={t.badEmail} data-bad-phone={t.badPhone} data-sending={t.sending} data-error={t.error} data-suggested={t.suggested}>
+      <ol class="lead-steps" aria-hidden="true">{t.steps.map((s, i) => <li data-step-dot={i}><span>{i + 1}</span>{s}</li>)}</ol>
+
+      <fieldset class="lead-step" data-step="0">
+        <legend>{t.goalQ}</legend>
+        <div class="opt-grid">
+          {(['citizenship', 'residency', 'unsure'] as const).map((g) => <label class="opt"><input type="radio" name="goal" value={g} required /><span>{t.goals[g]}</span></label>)}
+        </div>
+      </fieldset>
+
+      <fieldset class="lead-step" data-step="1">
+        <legend>{t.destQ}</legend>
+        <div class="opt-wrap">
+          <label class="opt opt-sm"><input type="radio" name="destination" value="" checked /><span>{t.destAny}</span></label>
+          {programs.map((p) => <label class="opt opt-sm" data-type={p.type}><input type="radio" name="destination" value={p.slug} /><span>{p[lang]}</span></label>)}
+        </div>
+      </fieldset>
+
+      <fieldset class="lead-step" data-step="2">
+        <legend>{t.budgetQ}</legend>
+        <div class="opt-grid two">
+          <label class="opt"><input type="radio" name="meetsMinimum" value="yes" required /><span>{t.budgetYes}</span></label>
+          <label class="opt"><input type="radio" name="meetsMinimum" value="no" /><span>{t.budgetNo}</span></label>
+        </div>
+        <p class="lead-note" id="budgetNote" hidden>{t.budgetNote}</p>
+      </fieldset>
+
+      <fieldset class="lead-step" data-step="3">
+        <legend>{t.steps[3]}</legend>
+        <div class="field-grid">
+          <label class="field"><span>{t.first}</span><input name="firstName" autocomplete="given-name" required /></label>
+          <label class="field"><span>{t.last}</span><input name="lastName" autocomplete="family-name" required /></label>
+          <label class="field"><span>{t.mobile}</span><input name="mobile" type="tel" inputmode="tel" autocomplete="tel" dir="ltr" placeholder="+962 7…" required /></label>
+          <label class="field"><span>{t.email}</span><input name="email" type="email" autocomplete="email" dir="ltr" required /></label>
+          <label class="field"><span>{t.nationality}</span>
+            <select name="nationality" required><option value="">{t.choose}</option>{nationalities.map((n) => <option value={n.en} data-branch={n.branch}>{n[lang]}</option>)}</select></label>
+          <label class="field"><span>{t.branch} <em id="branchHint" hidden></em></span>
+            <select name="branch" required><option value="">{t.choose}</option>{branches.map((b) => <option value={b.id}>{b[lang]}</option>)}</select></label>
+        </div>
+        <label class="check"><input type="checkbox" name="newsletter" /><span>{t.news}</span></label>
+        <label class="hp" aria-hidden="true">Company<input name="company" tabindex="-1" autocomplete="off" /></label>
+      </fieldset>
+
+      <p class="lead-error" id="leadError" role="alert" hidden></p>
+      <div class="lead-nav">
+        <button type="button" class="btn btn-ghost" id="leadBack" hidden>{t.back}</button>
+        <button type="button" class="btn btn-solid" id="leadNext">{t.next}</button>
+        <button type="submit" class="btn btn-solid" id="leadSend">{t.send}</button>
+      </div>
+      <div class="lead-done" id="leadDone" hidden tabindex="-1">
+        <h3>{t.doneTitle}</h3><p>{t.doneText}</p>
+        <a class="btn btn-ghost" href="https://whatsapp.com/channel/0029VaEYWBEDZ4LQlqkCVj08" rel="noopener" target="_blank">WhatsApp</a>
+      </div>
+    </form>
+  </div>
+</section>

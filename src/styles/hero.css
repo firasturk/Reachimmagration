@@ -1,0 +1,243 @@
+/* HERO — ported 1:1 from the verified theme-04 build for Reach (desktop stage, mobile stage, country picker, cursor pattern).
+   Do not re-time or re-space anything here by eye: values come from the Figma prototype and the approved preview. */
+/* HERO — 1440×810 stage scaled to the container */
+.hero{position:relative;width:100%;aspect-ratio:1440/810;overflow:hidden;background:var(--brand-bg)}
+.stage{position:absolute;left:0;top:0;width:1440px;height:810px;transform-origin:0 0;transform:scale(var(--s,1));color:var(--brand-ink);direction:ltr;text-align:left;font-family:var(--font-body)}
+.stage *{position:absolute;margin:0}
+.stage a{color:inherit;text-decoration:none}
+.grp{inset:0}
+
+/* every animated piece: rest state → `--from` state. Vars are reset per element so nested pieces never inherit a parent's move. */
+.a{--from:none;--rest:none;--from-op:1;transform:var(--rest);transition:transform var(--dur) var(--spring) var(--d,0s),opacity var(--dur) var(--spring) var(--d,0s),clip-path var(--dur) var(--spring) var(--d,0s),height var(--dur) var(--spring) var(--d,0s)}
+.grp[data-state="pre"] .a,.grp[data-state="out"] .a{transform:var(--from);opacity:var(--from-op)}
+.grp[data-state="pre"] .a{transition:none}
+.grp[data-state="out"] .a{transition-delay:var(--dx,0s)}
+@media (prefers-reduced-motion:reduce){.a,.bgl{transition:none!important}}
+
+/* background: ONE continuous video, NOT mirrored for Reach (new footage is shot for this layout). Stills underneath are stand-ins / fallback */
+.bgl{inset:0;opacity:0;transition:opacity 1.1s ease}
+.bgl.on{opacity:1}
+.bgl img{inset:0;width:100%;height:100%;object-fit:cover}
+.flip{transform:scaleX(-1)}
+.bgv{inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .3s}
+.bgv.ready{opacity:1}
+.glow{left:-253.16px;top:-134.56px;width:627.16px;height:703.56px;filter:blur(100px);opacity:.4;background:linear-gradient(174.8deg,var(--brand-glow-a) 40.1%,var(--brand-glow-b) 84.5%)}
+
+
+/* nav */
+.logo{left:24px;top:22.98px;height:23.04px;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.logo>*{position:static}
+.logo b{font:500 20px/1 var(--font-display);letter-spacing:3px}
+.logo i{font:400 9px/1 var(--font-body);letter-spacing:2.4px;text-transform:uppercase;font-style:normal;opacity:.75;border-left:1px solid rgba(255,255,255,.4);padding-left:8px}
+.links{left:720px;top:29px;transform:translateX(-50%);width:max-content;height:11px;display:flex;gap:60px;align-items:center;font-size:12px;line-height:.9;white-space:nowrap}
+.links a{position:relative;font-weight:300}
+.links a[aria-current]{font-weight:500}
+.stage a.cta-sm{right:26.5px;top:13px;display:flex;gap:10px;align-items:center;padding:16px 24px;border-radius:12px;font:500 12px/.9 var(--font-body);white-space:nowrap;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);background:linear-gradient(72.5deg,rgba(255,255,255,.3) 4.6%,rgba(255,255,255,.054) 64.3%)}
+.cta-sm>*,.cta>*{position:static}
+.rim::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+  background:linear-gradient(135deg,rgba(255,255,255,0),rgba(255,255,255,.6) 50%,rgba(255,255,255,0));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.dots{display:block;width:5.8px;height:9.2px;fill:currentColor}
+
+/* shared pieces */
+.mask{overflow:hidden}
+.card{width:168px;height:152px;border-radius:40px;overflow:hidden}
+.grow{height:281px}
+.grp[data-state="pre"] .grow,.grp[data-state="out"] .grow{height:128px}
+/* Figma "Glass" effect (frost 31) — frosted backdrop + light rim */
+.glass{background:var(--brand-glass);backdrop-filter:blur(15px) saturate(1.15);-webkit-backdrop-filter:blur(15px) saturate(1.15);box-shadow:inset 0 0 24px rgba(255,255,255,.14),0 10px 30px rgba(30,45,70,.08)}
+.glass::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.25px;pointer-events:none;z-index:3;
+  background:linear-gradient(140deg,rgba(255,255,255,.95),rgba(255,255,255,.12) 34%,rgba(255,255,255,.1) 64%,rgba(255,255,255,.7));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.dark{background:var(--brand-card)}
+/* text that Figma sets to blend "Difference": lives in its own layer ABOVE the glass card so it blends with the video, exactly like the file */
+.ink{width:168px;height:152px;mix-blend-mode:difference;color:#fff;pointer-events:none}
+.num{font:400 40px/.9 var(--font-display);letter-spacing:-.4px;text-transform:uppercase;white-space:nowrap;font-feature-settings:"zero"}
+.lbl{font:400 14px/1.3 var(--font-body);opacity:.6;white-space:nowrap}
+.lbl.a{--from-op:.6}
+.soft-ink{color:var(--brand-ink-soft)}
+.wrap{display:flex;align-items:center;justify-content:center}
+.wrap>.im{position:static;flex:none}
+.im img{position:static;display:block;width:100%;height:100%;object-fit:cover}
+.media{background:#fff}
+.media img,.media video{inset:0;width:100%;height:100%;object-fit:cover}
+
+/* scene 1 */
+.headline{left:81.5px;top:144px;width:403.5px;font:400 80px/72px var(--font-display);letter-spacing:-.8px;text-transform:uppercase;font-feature-settings:"ss01","ss02","ss05"}
+.headline .mask{position:relative;display:block;height:72px;margin-bottom:7.25px;white-space:nowrap}
+.headline .mask.r{text-align:left} /* theme staggers lines right/left/right for the wide Tektur; with Philosopher all three lines align left */
+.headline .mask span,.h2 .mask span{position:relative;display:block}
+.sub{width:292.5px;font:400 20px/1.3 var(--font-body)}
+.stage a.cta{left:81.5px;top:516.1px;display:flex;gap:13.7px;align-items:center;padding:21.95px 32.93px;border-radius:17px;background:#fff;color:var(--brand-cta-ink);font:500 18px/.9 var(--font-body);white-space:nowrap}
+.cta .dots{width:7.97px;height:12.63px}
+.vid{left:24px;top:618px;width:196px;height:169px;background:#fff;overflow:hidden;clip-path:inset(0 0 0 0 round 40px)}
+.grp[data-state="pre"] .vid,.grp[data-state="out"] .vid{clip-path:inset(0 74px 0 74px round 40px)}
+.tag{font:500 12px/11px var(--font-display);letter-spacing:1.8px;text-transform:uppercase;white-space:nowrap}
+.title{font:500 32px/1.25 var(--font-display);text-transform:uppercase}
+.dots3{left:136.19px;top:18.54px;width:11.12px;height:17.64px;fill:#fff;overflow:visible}
+
+/* scene 2 */
+.h2{left:24px;top:161px;width:273.5px;font:400 60px/54px var(--font-display);letter-spacing:-.6px;text-transform:uppercase;font-feature-settings:"ss01","ss02","ss05"}
+.h2 .mask{position:relative;display:block;height:54px;white-space:nowrap}
+.body20{font:400 20px/1.3 var(--font-body)}
+
+/* scene 3 */
+.tcard{width:225px;padding:24px;border-radius:32px;display:flex;flex-direction:column;gap:20px}
+.tcard>h3,.tcard>p{position:relative}
+.tcard h3{font:500 24px/1.25 var(--font-display);text-transform:uppercase}
+.tcard p{font:400 16px/1.3 var(--font-body)}
+@supports (text-box:trim-both cap alphabetic){.tcard h3{text-box:trim-both cap alphabetic}}
+@supports not (text-box:trim-both cap alphabetic){.tcard h3{margin:-6px 0 -7px}}
+.vcard{width:225px;height:199px;border-radius:32px;overflow:hidden;background:var(--brand-glass)}
+
+/* scene groups sit on top of each other full-size: only the visible scene's links/buttons take clicks */
+.grp,.grp *{pointer-events:none}
+.grp[data-state="in"] a,.grp[data-state="in"] [data-picker]{pointer-events:auto}
+.tcard.glass{background:var(--brand-glass-text)}
+.card.glass.frost{background:rgba(255,255,255,.66)} /* 25+ card rests on the burgundy passport for the first 2s: frosted so its difference text stays dark */
+.tcard[data-picker]{cursor:pointer}
+.tcard h3 .dots{position:static;display:inline-block;margin-left:10px;width:7px;height:11px;vertical-align:1px}
+.stage a:focus-visible,.tcard[data-picker]:focus-visible{outline:2px solid #fff;outline-offset:3px}
+
+/* COUNTRY PICKER — opens from every CTA. Lives outside the scaled stage so it stays readable on phones */
+dialog.picker{border:0;padding:0;background:transparent;color:var(--brand-ink);width:min(760px,92vw);max-height:92vh;overflow:visible;font-family:var(--font-body);direction:ltr;text-align:left}
+dialog.picker::backdrop{background:rgba(20,10,14,.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.pk{position:relative;border-radius:32px;padding:clamp(22px,4vw,40px);background:var(--brand-bg);overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5)}
+.pk::before{content:"";position:absolute;left:-140px;top:-160px;width:460px;height:460px;filter:blur(90px);opacity:.6;background:linear-gradient(174.8deg,var(--brand-glow-a) 40.1%,var(--brand-glow-b) 84.5%);pointer-events:none}
+.pk::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.25px;pointer-events:none;background:linear-gradient(140deg,rgba(255,255,255,.7),rgba(255,255,255,.08) 34%,rgba(255,255,255,.06) 64%,rgba(255,255,255,.45));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.pk>*{position:relative}
+.pk-tag{font:500 12px/1 var(--font-display);letter-spacing:1.8px;text-transform:uppercase;opacity:.85;margin:0}
+.pk h2{font:500 clamp(24px,4.4vw,32px)/1.2 var(--font-display);text-transform:uppercase;margin:16px 0 10px;padding-inline-end:40px}
+.pk p{font:400 16px/1.45 var(--font-body);color:var(--brand-ink-soft);opacity:.85;margin:0 0 22px;max-width:54ch}
+.pk-grid{display:flex;flex-wrap:wrap;gap:8px;max-height:46vh;overflow:auto;padding:2px}
+.pk-chip{font:400 14px/1 var(--font-body);padding:12px 16px;border-radius:12px;border:1px solid rgba(255,255,255,.24);background:rgba(255,255,255,.07);color:inherit;cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.pk-chip:hover{background:rgba(255,255,255,.16)}
+.pk-chip[aria-pressed="true"]{background:#fff;color:var(--brand-cta-ink);border-color:#fff;font-weight:500}
+.pk-foot{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between;margin-top:26px}
+.pk-pick{font:400 14px/1.3 var(--font-body);opacity:.8;margin:0}
+.pk-go{display:inline-flex;gap:12px;align-items:center;padding:18px 28px;border-radius:16px;border:0;background:#fff;color:var(--brand-cta-ink);font:500 16px/1 var(--font-body);cursor:pointer;white-space:nowrap}
+.pk-go:disabled{opacity:.35;cursor:not-allowed}
+.pk-go .dots{width:7px;height:11px}
+.pk-close{position:absolute;top:18px;right:18px;width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.24);background:rgba(255,255,255,.07);color:inherit;font:400 20px/1 var(--font-body);cursor:pointer}
+.pk-chip:focus-visible,.pk-go:focus-visible,.pk-close:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.pk-done{display:none}
+.pk.done .pk-pickview{display:none}
+.pk.done .pk-done{display:block}
+@media (max-width:520px){.pk-grid{max-height:34vh}.pk-go{width:100%;justify-content:center}.pk p{font-size:15px;margin-bottom:16px}}
+.pk-link{background:none;border:0;color:inherit;font:400 14px/1 var(--font-body);text-decoration:underline;cursor:pointer;padding:0;opacity:.85}
+
+/* BACKGROUND WRAPPER — lives in whichever stage is active */
+.bgwrap{position:absolute;inset:0}
+.bgwrap>*{position:absolute}
+
+/* MOBILE STAGE (hero narrower than 600px) */
+@media (max-width:599px){.hero:not([data-mode]){aspect-ratio:390/780}}
+.hero[data-mode="m"]{aspect-ratio:390/780}
+.hero[data-mode="m"] .stage{display:none}
+.mstage{display:none;position:absolute;left:0;top:0;width:390px;height:780px;overflow:hidden;transform-origin:0 0;transform:scale(var(--ms,1));color:var(--brand-ink);direction:ltr;text-align:left;font-family:var(--font-body)}
+.hero[data-mode="m"] .mstage{display:block}
+.mstage p,.mstage h1,.mstage h2,.mstage h3{margin:0}
+.mstage a{color:inherit;text-decoration:none}
+.mstage .mask{position:relative;display:block;overflow:hidden}
+.mstage .mask>span,.mstage .mask>p{display:block}
+.mstage .grp{position:absolute;inset:0}
+.m-bg{position:absolute;left:0;top:0;width:390px;height:456px;overflow:hidden;background:var(--brand-bg)}
+.m-bg .bgl img,.m-bg .bgv{object-position:var(--pos,50% 50%);transition:object-position 2.6s cubic-bezier(.45,0,.2,1),opacity .3s}
+.m-topfade{position:absolute;left:0;top:0;width:390px;height:120px;background:linear-gradient(180deg,rgba(24,16,19,.62),rgba(24,16,19,0));pointer-events:none}
+.m-fade{position:absolute;left:0;top:236px;width:390px;height:222px;background:linear-gradient(180deg,rgba(43,35,38,0) 0%,rgba(43,35,38,.74) 58%,var(--brand-bg) 100%);pointer-events:none}
+/* nav */
+.m-logo{position:absolute;left:20px;top:24px;height:24px;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.m-logo b{font:500 19px/1 var(--font-display);letter-spacing:3px}
+.m-logo i{font:400 8.5px/1 var(--font-body);letter-spacing:2.2px;text-transform:uppercase;font-style:normal;opacity:.75;border-left:1px solid rgba(255,255,255,.4);padding-left:8px}
+.m-cta-sm{position:absolute;right:72px;top:14px;height:44px;display:flex;gap:9px;align-items:center;padding:0 16px;border-radius:13px;font:500 13px/1 var(--font-body);white-space:nowrap;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);background:linear-gradient(72.5deg,rgba(255,255,255,.3) 4.6%,rgba(255,255,255,.06) 64.3%)}
+.m-menu{position:absolute;right:20px;top:14px;width:44px;height:44px;border:0;border-radius:13px;color:inherit;cursor:pointer;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);background:linear-gradient(72.5deg,rgba(255,255,255,.3) 4.6%,rgba(255,255,255,.06) 64.3%)}
+.m-menu i{position:absolute;left:13px;width:18px;height:1.6px;border-radius:2px;background:currentColor;transition:transform .35s ease,top .35s ease}
+.m-menu i:first-child{top:18px}.m-menu i:last-child{top:25px}
+.m-menu[aria-expanded="true"] i:first-child{top:21.5px;transform:rotate(45deg)}
+.m-menu[aria-expanded="true"] i:last-child{top:21.5px;transform:rotate(-45deg)}
+.m-menu-panel{position:absolute;right:20px;top:66px;width:210px;padding:8px;border-radius:18px;background:rgba(43,30,35,.86);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 18px 40px rgba(0,0,0,.35);display:flex;flex-direction:column;z-index:6}
+.m-menu-panel[hidden]{display:none}
+.m-menu-panel a{display:flex;align-items:center;height:46px;padding:0 14px;border-radius:12px;font:400 16px/1 var(--font-body)}
+.m-menu-panel a:active{background:rgba(255,255,255,.12)}
+/* scene 1 */
+.m-h1{position:absolute;left:20px;top:352px;font:400 50px/48px var(--font-display);letter-spacing:-.5px;text-transform:uppercase}
+.m-h1 .mask{height:48px;margin-bottom:2px;white-space:nowrap}
+.m-sub-mask{position:absolute!important;left:20px;top:514px;width:332px;height:46px}
+.m-sub{font:400 16px/1.42 var(--font-body);color:var(--brand-ink-soft)}
+.m-cta{position:absolute;left:20px;top:576px;height:52px;display:inline-flex;gap:12px;align-items:center;padding:0 28px;border-radius:16px;background:#fff;color:var(--brand-cta-ink)!important;font:500 16px/1 var(--font-body);white-space:nowrap}
+.m-cta .dots{width:7px;height:11px}
+/* swipe rows of stat cards */
+.m-row{position:absolute;left:0;top:650px;width:390px;height:118px;display:flex;gap:10px;padding:0 20px;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x proximity;scroll-padding-left:20px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.m-row::-webkit-scrollbar{display:none}
+.m-row::after{content:"";flex:0 0 10px}
+.m-card{position:relative;flex:0 0 150px;height:118px;border-radius:28px;overflow:hidden;scroll-snap-align:start}
+.m-card.dark{background:var(--brand-card)}
+.m-card.m-vid{flex-basis:132px;background:#fff}
+.m-card video,.m-thumb video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.m-ci{position:absolute;right:-78px;top:-96px;width:230px;height:230px;transform:rotate(-18deg);pointer-events:none}
+#m-s2 .m-ci{right:-58px;top:-74px;width:176px;height:176px;transform:rotate(-14deg)}
+.m-num{position:absolute;left:16px;top:56px;font:400 32px/.9 var(--font-display);letter-spacing:-.3px;text-transform:uppercase;white-space:nowrap}
+.m-lbl{position:absolute;left:17px;top:89px;font:400 12.5px/1.2 var(--font-body);opacity:.72;white-space:nowrap}
+/* scene 2 */
+.m-h2{position:absolute;left:20px;top:352px;font:400 38px/38px var(--font-display);letter-spacing:-.4px;text-transform:uppercase}
+.m-h2 .mask{height:38px;white-space:nowrap}
+.m-title-mask{position:absolute!important;left:20px;top:484px;width:350px;height:26px}
+.m-title{font:500 20px/1.25 var(--font-display);text-transform:uppercase;white-space:nowrap}
+.m-body-mask{position:absolute!important;left:20px;top:520px;width:340px;height:70px}
+.m-body{font:400 16px/1.42 var(--font-body);color:var(--brand-ink-soft)}
+/* scene 3 */
+.m-thumbs{position:absolute;left:20px;top:300px;width:350px;display:flex;gap:10px}
+.m-thumb{position:relative;flex:1;height:124px;border-radius:26px;overflow:hidden;background:#fff}
+.m-stack{position:absolute;left:20px;top:436px;width:350px;display:flex;flex-direction:column;gap:10px}
+.m-tcard{position:relative;padding:16px 18px 17px;border-radius:24px;background:var(--brand-glass-text)}
+.m-tcard h3{font:500 17px/1.2 var(--font-display);text-transform:uppercase;margin-bottom:7px}
+.m-tcard h3 .dots{display:inline-block;margin-left:9px;width:6px;height:10px;vertical-align:0}
+.m-tcard p{font:400 14px/1.4 var(--font-body);color:var(--brand-ink-soft)}
+.m-tcard[data-picker]{cursor:pointer}
+/* mobile pieces that take touches while their scene is on */
+.grp[data-state="in"] button,.grp[data-state="in"] .m-row,.grp[data-state="in"] .m-menu-panel,.grp[data-state="in"] .m-menu-panel a{pointer-events:auto}
+.mstage a:focus-visible,.mstage button:focus-visible,.m-tcard:focus-visible,.m-row:focus-visible{outline:2px solid #fff;outline-offset:3px}
+
+/* CURSOR PATTERN — Reach's rosette motifs spiral out of the pointer. Hero only, sits above the video and under the copy and cards */
+.rm-defs{position:absolute;width:0;height:0;overflow:hidden}
+.trail{inset:0;pointer-events:none;overflow:hidden}
+.trail .rm{width:0;height:0;will-change:transform}
+.trail .rm-i{left:0;top:0;will-change:transform,opacity;opacity:0}
+.trail svg{left:0;top:0;fill:var(--brand-accent);overflow:visible}
+
+
+/* ARABIC — the stage keeps its art-directed geometry (the footage is composed for it); copy blocks flip to the right edge of their boxes */
+.hero[data-rtl] .headline,.hero[data-rtl] .h2,.hero[data-rtl] .title,.hero[data-rtl] .body20,.hero[data-rtl] .sub,.hero[data-rtl] .tcard,.hero[data-rtl] .tag{direction:rtl;text-align:right;font-feature-settings:normal;letter-spacing:0}
+.hero[data-rtl] .headline{font-family:var(--font-display-ar);font-size:62px;line-height:72px;font-weight:600}
+.hero[data-rtl] .headline .mask.r,.hero[data-rtl] .headline .mask{text-align:right}
+.hero[data-rtl] .h2{font-family:var(--font-display-ar);font-size:44px;font-weight:600}
+.hero[data-rtl] .title,.hero[data-rtl] .tcard h3,.hero[data-rtl] .tag{font-family:var(--font-display-ar);font-weight:600}
+.hero[data-rtl] .title{font-size:27px}
+.hero[data-rtl] .tcard h3{font-size:21px}
+.hero[data-rtl] .sub,.hero[data-rtl] .body20,.hero[data-rtl] .tcard p,.hero[data-rtl] .lbl,.hero[data-rtl] .links,.hero[data-rtl] a.cta,.hero[data-rtl] a.cta-sm{font-family:var(--font-body-ar)}
+.hero[data-rtl] .sub{font-size:18px}.hero[data-rtl] .body20{font-size:18px}.hero[data-rtl] .tcard p{font-size:15px}
+.hero[data-rtl] .lbl{font-size:13px;left:auto!important;right:23px}
+.hero[data-rtl] .tcard h3 .dots{margin-left:0;margin-right:10px}
+.hero[data-rtl] .stage a.cta{left:auto;right:calc(1440px - 485px);flex-direction:row-reverse}
+.hero[data-rtl] .stage a.cta-sm{flex-direction:row-reverse}
+.hero[data-rtl] .links{direction:rtl;font-size:13px}
+/* mobile */
+.hero[data-rtl] .m-h1,.hero[data-rtl] .m-h2{left:auto;right:20px;direction:rtl;text-align:right;font-family:var(--font-display-ar);font-weight:600;letter-spacing:0}
+.hero[data-rtl] .m-h1{font-size:44px}.hero[data-rtl] .m-h2{font-size:32px}
+.hero[data-rtl] .m-sub-mask,.hero[data-rtl] .m-title-mask,.hero[data-rtl] .m-body-mask{left:auto;right:20px;direction:rtl;text-align:right}
+.hero[data-rtl] .m-title{font-family:var(--font-display-ar);font-weight:600;font-size:18px}
+.hero[data-rtl] .m-sub,.hero[data-rtl] .m-body,.hero[data-rtl] .m-lbl,.hero[data-rtl] .m-tcard p,.hero[data-rtl] .m-cta,.hero[data-rtl] .m-cta-sm,.hero[data-rtl] .m-menu-panel a{font-family:var(--font-body-ar)}
+.hero[data-rtl] .m-cta{left:auto;right:20px;flex-direction:row-reverse}
+.hero[data-rtl] .m-cta-sm{flex-direction:row-reverse}
+.hero[data-rtl] .m-row,.hero[data-rtl] .m-stack,.hero[data-rtl] .m-menu-panel{direction:rtl}
+.hero[data-rtl] .m-num{left:auto;right:16px;direction:ltr}.hero[data-rtl] .m-lbl{left:auto;right:17px}
+.hero[data-rtl] .m-ci{right:auto;left:-78px;transform:rotate(18deg) scaleX(-1)}
+.hero[data-rtl] #m-s2 .m-ci{right:auto;left:-58px;transform:rotate(14deg) scaleX(-1)}
+.hero[data-rtl] .m-tcard h3{font-family:var(--font-display-ar);font-weight:600}
+.hero[data-rtl] .m-tcard h3 .dots{margin-left:0;margin-right:9px}
+
+.hero[data-rtl] .sub-mask{left:192.5px!important} /* right edge lines up with the headline and the CTA (x = 485) */
+
+/* the longer "Free Consultation" label needs the room the small wordmark was taking on phones */
+.m-logo i{display:none}
+.m-cta-sm{padding:0 14px}

@@ -1,0 +1,33 @@
+{
+  "name": "reach-immigration-site",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "preview:file": "astro build && node tools/preview.mjs en && node tools/preview.mjs ar"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "@fontsource-variable/el-messiri": "^5.3.0",
+    "@fontsource-variable/urbanist": "^5.3.0",
+    "@fontsource/ibm-plex-sans-arabic": "^5.3.0",
+    "@fontsource/philosopher": "^5.3.0",
+    "astro": "^7.3.3",
+    "d3-geo": "^3.1.1",
+    "topojson-client": "^3.1.0",
+    "world-atlas": "^2.0.2"
+  },
+  "devDependencies": {
+    "@types/d3-geo": "^3.1.1",
+    "@types/geojson": "^7946.0.16",
+    "@types/topojson-client": "^3.1.5",
+    "typescript": "^7.0.2"
+  },
+  "engines": {
+    "node": "22.x"
+  }
+}

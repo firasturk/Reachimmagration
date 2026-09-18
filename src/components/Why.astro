@@ -1,0 +1,21 @@
+---
+import SectionHead from './SectionHead.astro';
+import { ui, type Lang } from '../i18n/ui';
+interface Props { lang: Lang }
+const { lang } = Astro.props; const t = ui[lang].why;
+---
+<section class="sec sec-why tone-mist" id="why-reach">
+  <div class="container why-grid">
+    <SectionHead tag={t.tag} title={t.title} />
+    <ol class="why-list rv">{t.items.map((it, i) => <li class="rv-up" style={`--d:${0.12 + i * 0.1}s`}><span>{String(i + 1).padStart(2, '0')}</span><h3>{it.t}</h3><p>{it.p}</p></li>)}</ol>
+  </div>
+  <!-- footage with glass stat cards over it: the hero's card language, brought down the page -->
+  <div class="container why-media rv">
+    <div class="tile tall rv-media" style="--d:.05s"><video class="lazy-v" data-v="walkTall" data-src="/video/family-walk-tall.mp4" poster="/images/sections/family-walk-tall-poster.webp" muted loop playsinline preload="none" aria-hidden="true"></video></div>
+    <div class="tile wide rv-media" style="--d:.15s">
+      <img src="/images/sections/resort.webp" alt="" width="1280" height="720" loading="lazy" decoding="async" />
+      <dl class="glass-stats">{t.stats.map((s, i) => <div class="rv-up" style={`--d:${0.45 + i * 0.09}s`}><dt>{s.l}</dt><dd>{s.n}</dd></div>)}</dl>
+    </div>
+    <div class="tile tall rv-media" style="--d:.25s"><video class="lazy-v" data-v="poolTall" data-src="/video/family-pool-tall.mp4" poster="/images/sections/family-pool-tall-poster.webp" muted loop playsinline preload="none" aria-hidden="true"></video></div>
+  </div>
+</section>

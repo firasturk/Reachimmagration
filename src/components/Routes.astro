@@ -1,0 +1,24 @@
+---
+import SectionHead from './SectionHead.astro';
+import { ui, type Lang } from '../i18n/ui';
+interface Props { lang: Lang }
+const { lang } = Astro.props; const t = ui[lang].routes; const home = `/${lang}/`;
+const hrefs = [`${home}programs/?type=citizenship`, `${home}programs/?type=residency`];
+const art = ['/images/sections/passport.webp', '/images/sections/residence-card.webp'];
+---
+<section class="sec sec-routes tone-ivory" aria-label={t.title.join(' ')}>
+  <div class="container">
+    <SectionHead tag={t.tag} title={t.title} motion="slide" />
+    <div class="routes rv">
+      {t.items.map((it, i) => (
+        <a class:list={['route rv-up', { dark: i === 0 }]} href={hrefs[i]} style={`--d:${0.1 + i * 0.12}s`}>
+          <img class="route-art rv-art" src={art[i]} alt="" width="720" height="720" loading="lazy" decoding="async" style={`--d:${0.25 + i * 0.12}s`} />
+          <span class="route-n">{it.n}</span>
+          <h3>{it.t}</h3>
+          <p data-split style={`--d:${0.3 + i * 0.12}s`}>{it.p}</p>
+          <span class="link-arrow">{it.cta}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

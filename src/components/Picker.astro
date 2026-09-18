@@ -1,0 +1,22 @@
+---
+// Country picker opened by every [data-picker] element (hero CTAs, cards). Choosing a country pre-fills the consultation form.
+import { ui, type Lang } from '../i18n/ui';
+import { programs } from '../data/site';
+interface Props { lang: Lang }
+const { lang } = Astro.props; const t = ui[lang].picker;
+---
+<dialog class="picker" id="picker" aria-labelledby="pkTitle" dir={lang === 'ar' ? 'rtl' : 'ltr'}>
+  <div class="pk" id="pk">
+    <button type="button" class="pk-close" id="pkClose" aria-label={t.close}>×</button>
+    <p class="pk-tag">{t.tag}</p>
+    <h2 id="pkTitle">{t.title}</h2>
+    <p>{t.text}</p>
+    <div class="pk-grid" id="pkGrid" role="group">
+      {programs.map((p) => <button type="button" class="pk-chip" aria-pressed="false" data-slug={p.slug} data-name={p[lang]}>{p[lang]}</button>)}
+    </div>
+    <div class="pk-foot">
+      <p class="pk-pick" id="pkPick" aria-live="polite" data-none={t.none} data-selected={t.selected}>{t.none}</p>
+      <button type="button" class="pk-go" id="pkGo" disabled><span>{t.go}</span></button>
+    </div>
+  </div>
+</dialog>

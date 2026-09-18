@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://reachimmigration.com/sitemap-index.xml

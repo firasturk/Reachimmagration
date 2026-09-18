@@ -1,0 +1,78 @@
+---
+// Smart Passport: a CSS-3D book. Leaf 0 is the cover; every following spread is one program (stamp page + details page).
+// In Arabic the book opens from the other side, like an Arabic passport. Logic: scripts/passport.ts.
+import SectionHead from './SectionHead.astro';
+import { ui, type Lang } from '../i18n/ui';
+import { programs } from '../data/site';
+interface Props { lang: Lang }
+const { lang } = Astro.props; const t = ui[lang].passport; const m = ui[lang].map; const home = `/${lang}/`;
+const N = programs.length;
+const mrz = (s: string) => ('P<REACH<<' + s.toUpperCase().replace(/[^A-Z]+/g, '<')).padEnd(34, '<').slice(0, 34);
+const tilt = [-9, 7, -5, 11, -12, 6, -7, 9, -4, 12, -10, 5, -8, 8, -6, 10, -11, 4, -9, 7];
+---
+<section class="sec sec-passport tone-mist" id="smart-passport" aria-labelledby="ppTitle">
+  <div class="container">
+    <SectionHead tag={t.tag} title={t.title} text={t.text} center id="ppTitle" />
+    <div class="book-stage rv rv-up" style="--d:.15s">
+      <div class="book" id="book" data-count={N + 1} data-turned="0">
+        <div class="book-base is-left paper" aria-hidden="true"></div>
+        <div class="book-base is-right paper">
+          <div class="pp-end">
+            <h3>{t.endTitle}</h3>
+            <p>{t.endText}</p>
+            <a class="btn btn-solid" href="#consult">{t.endCta}</a>
+          </div>
+        </div>
+        {Array.from({ length: N + 1 }, (_, i) => {
+          const front = i === 0 ? null : programs[i - 1];
+          const back = i < N ? programs[i] : null;
+          return (
+            <div class="leaf" data-i={i} style={`--i:${i}`}>
+              <div class:list={['face front', i === 0 ? 'cover' : 'paper']}>
+                {i === 0 ? (
+                  <div class="pp-cover">
+                    <p>{t.coverTop}</p>
+                    <svg viewBox="0 0 120 120" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3"><circle cx="60" cy="60" r="44" /><ellipse cx="60" cy="60" rx="19" ry="44" /><path d="M16 60h88M24 36h72M24 84h72M60 16v88" /></g></svg>
+                    <p>{t.coverBottom}</p>
+                    <button type="button" class="pp-open" data-book="next">{t.open}</button>
+                  </div>
+                ) : front && (
+                  <article class="pp-details">
+                    <header><p class="pp-label">{t.stamp}</p><p class="pp-no">{String(i).padStart(2, '0')} / {N}</p></header>
+                    <h3>{front[lang]}</h3>
+                    <dl>
+                      <div><dt>{t.route}</dt><dd>{m.types[front.type]}</dd></div>
+                      <div><dt>{t.region}</dt><dd>{m.regions[front.region]}</dd></div>
+                      <div><dt>{t.agent}</dt><dd>{front.licensed ? <a href={front.licensed} rel="noopener" target="_blank">{t.agentYes}</a> : t.agentNo}</dd></div>
+                    </dl>
+                    <div class="pp-actions">
+                      <a class="btn btn-solid btn-sm" href="#consult" data-assess={front.slug}>{t.assess}</a>
+                      <a class="link-arrow" href={`${home}programs/${front.slug}/`}>{t.details}</a>
+                    </div>
+                    <p class="pp-mrz" aria-hidden="true" dir="ltr">{mrz(front.en)}</p>
+                  </article>
+                )}
+              </div>
+              <div class="face back paper" aria-hidden="true">
+                {back && (
+                  <div class="pp-stamp" style={`--tilt:${tilt[i % tilt.length]}deg`}>
+                    <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="92" /><circle cx="100" cy="100" r="80" stroke-dasharray="3 5" /><circle cx="100" cy="100" r="46" /></svg>
+                    <span class="pp-stamp-top">REACH · {m.regions[back.region]}</span>
+                    <strong>{back[lang]}</strong>
+                    <span class="pp-stamp-bottom">{m.types[back.type]}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+    <div class="book-ctrl rv rv-up" style="--d:.25s">
+      <button type="button" class="car-btn" data-book="prev" aria-label={t.prev}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg></button>
+      <label class="sr-only" for="bookJump">{t.jump}</label>
+      <select id="bookJump" class="select"><option value="0">{t.cover}</option>{programs.map((p, i) => <option value={i + 1}>{String(i + 1).padStart(2, '0')} · {p[lang]}</option>)}</select>
+      <button type="button" class="car-btn" data-book="next" aria-label={t.next}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg></button>
+    </div>
+  </div>
+</section>

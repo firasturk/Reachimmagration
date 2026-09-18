@@ -1,0 +1,16 @@
+---
+import SectionHead from './SectionHead.astro';
+import { ui, type Lang } from '../i18n/ui';
+import { insights } from '../data/site';
+interface Props { lang: Lang }
+const { lang } = Astro.props; const t = ui[lang].insights;
+const fmt = new Intl.DateTimeFormat(lang === 'ar' ? 'ar' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<section class="sec sec-insights" id="insights">
+  <div class="container">
+    <SectionHead tag={t.tag} title={t.title} motion="slide" />
+    <ul class="post-grid rv" role="list">
+      {insights.map((p, i) => <li class="rv-up" style={`--d:${i * 0.08}s`}><a href={p.url} rel="noopener" target="_blank" lang="en" dir="ltr"><p class="post-meta">{p.tag} · <time datetime={p.date}>{fmt.format(new Date(p.date))}</time></p><h3>{p.title}</h3><span class="link-arrow">{t.read}</span></a></li>)}
+    </ul>
+  </div>
+</section>

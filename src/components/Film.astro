@@ -1,0 +1,17 @@
+---
+// Film band: one slow aerial loop with a statement over it — the same "copy over footage" idea as the hero, once, mid-page.
+import { ui, type Lang } from '../i18n/ui';
+interface Props { lang: Lang }
+const { lang } = Astro.props; const t = ui[lang].film;
+---
+<section class="sec-film" aria-label={t.title.join(' ')}>
+  <div class="film rv rv-media">
+    <video class="lazy-v" data-v="marina" data-src="/video/marina.mp4" poster="/images/sections/marina-poster.webp" muted loop playsinline preload="none" aria-hidden="true"></video>
+    <div class="film-copy">
+      <p class="sec-tag rv-side"><span class="mask"><span>{t.tag}</span></span></p>
+      <h2 class="sec-title rv-lines slide">{t.title.map((l, i) => <span class="mask"><span style={`--d:${0.15 + i * 0.1}s`}>{l}</span>{' '}</span>)}</h2>
+      <p class="sec-text" data-split style="--d:.35s">{t.text}</p>
+      <a class="btn btn-light rv-up" style="--d:.5s" href={`/${lang}/programs/`}>{t.cta}</a>
+    </div>
+  </div>
+</section>

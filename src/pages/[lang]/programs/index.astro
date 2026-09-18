@@ -1,0 +1,36 @@
+---
+import Base from '../../../layouts/Base.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import Consult from '../../../components/Consult.astro';
+import { ui, langs, type Lang } from '../../../i18n/ui';
+import { programs, SITE } from '../../../data/site';
+export const getStaticPaths = () => langs.map((lang) => ({ params: { lang } }));
+const lang = Astro.params.lang as Lang; const t = ui[lang]; const home = `/${lang}/`;
+const list = { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: programs.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p[lang], url: `${SITE.url}${home}programs/${p.slug}/` })) };
+---
+<Base lang={lang} title={t.meta.programsTitle} description={t.meta.programsDescription} path="/programs/" jsonld={[list]}>
+  <section class="sec sec-page-head">
+    <div class="container">
+      <SectionHead tag={t.map.tag.replace(/\[.*\]/, `[ ${t.header.programs} ]`)} title={t.programs.title} text={t.programs.text} level="h1" />
+      <div class="chips rv rv-up" role="group" id="programFilter">
+        <button type="button" class="chip" data-filter="all" aria-pressed="true">{t.map.all}</button>
+        <button type="button" class="chip" data-filter="citizenship" aria-pressed="false">{t.map.citizenship}</button>
+        <button type="button" class="chip" data-filter="residency" aria-pressed="false">{t.map.residency}</button>
+      </div>
+      <ul class="prog-grid rv" role="list" id="programGrid">
+        {programs.map((p, i) => (
+          <li class="rv-up" data-type={p.type} style={`--d:${Math.min(i, 8) * 0.04}s`}>
+            <a class="prog" href={`${home}programs/${p.slug}/`}>
+              <p class="ccard-region">{t.map.regions[p.region]}</p>
+              <h2>{p[lang]}</h2>
+              <p class="ccard-type">{t.map.types[p.type]}</p>
+              {p.licensed && <p class="badge">{t.map.licensed}</p>}
+              <span class="link-arrow">{t.map.view}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+  <Consult lang={lang} />
+</Base>

@@ -1,0 +1,38 @@
+---
+// Program page template. Facts shown are only the ones we can stand behind today (route, region, agent status).
+// Investment amounts, timelines and requirements are intentionally absent until the client supplies approved copy.
+import Base from '../../../layouts/Base.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import Consult from '../../../components/Consult.astro';
+import { ui, langs, type Lang } from '../../../i18n/ui';
+import { programs, SITE } from '../../../data/site';
+export const getStaticPaths = () => langs.flatMap((lang) => programs.map((p) => ({ params: { lang, slug: p.slug }, props: { p } })));
+const lang = Astro.params.lang as Lang; const { p } = Astro.props; const t = ui[lang]; const home = `/${lang}/`;
+const typeLabel = t.map.types[p.type];
+const title = `${p[lang]} — ${typeLabel} | ${SITE.name}`;
+const description = lang === 'ar' ? `${typeLabel} في ${p.ar} مع ريتش للهجرة. قيّم حالتك مجاناً وتحدّث إلى مستشار.` : `${typeLabel} in ${p.en} with Reach Immigration. Assess your case for free and talk to a consultant.`;
+const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [[t.programs.breadcrumbHome, home], [t.header.programs, `${home}programs/`], [p[lang], `${home}programs/${p.slug}/`]].map(([name, u], i) => ({ '@type': 'ListItem', position: i + 1, name, item: `${SITE.url}${u}` })) };
+---
+<Base lang={lang} title={title} description={description} path={`/programs/${p.slug}/`} jsonld={[crumbs]}>
+  <section class="sec sec-page-head">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href={home}>{t.programs.breadcrumbHome}</a> / <a href={`${home}programs/`}>{t.header.programs}</a> / <span aria-current="page">{p[lang]}</span></nav>
+      <div class="prog-head">
+        <SectionHead tag={`[ ${t.map.regions[p.region]} ]`} title={[p[lang]]} text={typeLabel} level="h1" />
+        <img class="prog-art rv rv-art" src={p.type === 'citizenship' ? '/images/sections/passport.webp' : '/images/sections/residence-card.webp'} alt="" width="720" height="720" decoding="async" />
+      </div>
+      <div class="prog-body">
+        <dl class="facts rv">
+          <div class="rv-up"><dt>{t.passport.route}</dt><dd>{typeLabel}</dd></div>
+          <div class="rv-up" style="--d:.06s"><dt>{t.passport.region}</dt><dd>{t.map.regions[p.region]}</dd></div>
+          <div class="rv-up" style="--d:.12s"><dt>{t.passport.agent}</dt><dd>{p.licensed ? <a href={p.licensed} rel="noopener" target="_blank">{t.passport.agentYes}</a> : t.passport.agentNo}</dd></div>
+        </dl>
+        <div class="prose rv rv-up" style="--d:.15s">
+          <p data-split>{t.programs.soon}</p>
+          <p><a class="btn btn-solid" href="#consult" data-assess={p.slug}>{t.map.assess}</a> <a class="btn btn-ghost" href={`${home}programs/`}>{t.programs.back}</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <Consult lang={lang} />
+</Base>
