@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from './SectionHead.astro';
+import { ui, type Lang } from '../i18n/ui';
+import { pages } from '../i18n/pages';
+import { legal, legalUpdated } from '../data/legal';
+interface Props { lang: Lang; kind: 'privacy' | 'terms' }
+const { lang, kind } = Astro.props; const t = ui[lang]; const l = pages[lang].legal; const home = `/${lang}/`;
+const title = kind === 'privacy' ? l.privacyTitle : l.termsTitle; const meta = kind === 'privacy' ? l.privacyMeta : l.termsMeta;
+const path = kind === 'privacy' ? '/privacy-policy/' : '/terms/';
+const fmt = new Intl.DateTimeFormat(lang === 'ar' ? 'ar' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Base lang={lang} title={meta} description={legal[kind][lang][1].p[0].slice(0, 155)} path={path}>
+  <section class="sec sec-page-head">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href={home}>{t.programs.breadcrumbHome}</a> / <span aria-current="page">{title.join(' ')}</span></nav>
+      <SectionHead tag={l.tag} title={title} level="h1" />
+      <p class="legal-date">{l.updated}: <time datetime={legalUpdated}>{fmt.format(new Date(legalUpdated))}</time></p>
+      <div class="legal">{legal[kind][lang].map((s) => <section><h2>{s.h}</h2>{s.p.map((p) => <p>{p}</p>)}</section>)}</div>
+    </div>
+  </section>
+</Base>

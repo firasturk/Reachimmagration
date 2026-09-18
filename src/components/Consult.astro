@@ -4,7 +4,7 @@
 // suggested from the nationality; the 150,000 USD minimum is asked kindly and never blocks the visitor from leaving details.
 import SectionHead from './SectionHead.astro';
 import { ui, type Lang } from '../i18n/ui';
-import { programs, branches, nationalities } from '../data/site';
+import { programs, branches, nationalities, CONTACT } from '../data/site';
 interface Props { lang: Lang }
 const { lang } = Astro.props; const t = ui[lang].consult; const v = ui[lang].vr;
 ---
@@ -67,7 +67,7 @@ const { lang } = Astro.props; const t = ui[lang].consult; const v = ui[lang].vr;
       </div>
       <div class="lead-done" id="leadDone" hidden tabindex="-1">
         <h3>{t.doneTitle}</h3><p>{t.doneText}</p>
-        <a class="btn btn-ghost" href="https://whatsapp.com/channel/0029VaEYWBEDZ4LQlqkCVj08" rel="noopener" target="_blank">WhatsApp</a>
+        <a class="btn btn-ghost" href={`https://wa.me/${CONTACT.whatsapp}`} rel="noopener" target="_blank">WhatsApp</a>
       </div>
     </form>
   </div>

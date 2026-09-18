@@ -2,6 +2,7 @@
 import Base from '../../../layouts/Base.astro';
 import SectionHead from '../../../components/SectionHead.astro';
 import Consult from '../../../components/Consult.astro';
+import ProgramCard from '../../../components/ProgramCard.astro';
 import { ui, langs, type Lang } from '../../../i18n/ui';
 import { programs, SITE } from '../../../data/site';
 export const getStaticPaths = () => langs.map((lang) => ({ params: { lang } }));
@@ -17,19 +18,7 @@ const list = { '@context': 'https://schema.org', '@type': 'ItemList', itemListEl
         <button type="button" class="chip" data-filter="citizenship" aria-pressed="false">{t.map.citizenship}</button>
         <button type="button" class="chip" data-filter="residency" aria-pressed="false">{t.map.residency}</button>
       </div>
-      <ul class="prog-grid rv" role="list" id="programGrid">
-        {programs.map((p, i) => (
-          <li class="rv-up" data-type={p.type} style={`--d:${Math.min(i, 8) * 0.04}s`}>
-            <a class="prog" href={`${home}programs/${p.slug}/`}>
-              <p class="ccard-region">{t.map.regions[p.region]}</p>
-              <h2>{p[lang]}</h2>
-              <p class="ccard-type">{t.map.types[p.type]}</p>
-              {p.licensed && <p class="badge">{t.map.licensed}</p>}
-              <span class="link-arrow">{t.map.view}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
+      <ul class="prog-grid rv" role="list" id="programGrid">{programs.map((p, i) => <ProgramCard p={p} lang={lang} i={i} />)}</ul>
     </div>
   </section>
   <Consult lang={lang} />

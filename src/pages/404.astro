@@ -1,8 +1,14 @@
 ---
+// Served by Vercel for any unknown URL. Both languages on one page because the URL that failed tells us nothing reliable.
 import Base from '../layouts/Base.astro';
-import { ui } from '../i18n/ui';
-const t = ui.en.notFound;
+import { pages } from '../i18n/pages';
+const en = pages.en.notFound, ar = pages.ar.notFound;
 ---
-<Base lang="en" title={`${t.title} | Reach Immigration`} description={t.text} path="/">
-  <section class="sec sec-page-head"><div class="container"><h1 class="sec-title">{t.title}</h1><p class="sec-text">{t.text}</p><p><a class="btn btn-solid" href="/en/">{t.home}</a> <a class="btn btn-ghost" href="/ar/" lang="ar">العودة إلى الرئيسية</a></p></div></section>
+<Base lang="en" title={`${en.title} | Reach Immigration`} description={en.text} path="/">
+  <section class="sec sec-page-head">
+    <div class="container two-col">
+      <div><h1 class="sec-title sm">{en.title}</h1><p class="sec-text">{en.text}</p><p class="cta-row"><a class="btn btn-solid" href="/en/">{en.home}</a><a class="btn btn-ghost" href="/en/programs/">{en.programs}</a></p></div>
+      <div lang="ar" dir="rtl"><h2 class="sec-title sm" style="font-family:var(--font-display-ar);font-weight:600">{ar.title}</h2><p class="sec-text" style="font-family:var(--font-body-ar)">{ar.text}</p><p class="cta-row"><a class="btn btn-solid" href="/ar/">{ar.home}</a><a class="btn btn-ghost" href="/ar/programs/">{ar.programs}</a></p></div>
+    </div>
+  </section>
 </Base>

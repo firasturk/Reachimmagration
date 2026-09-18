@@ -1,6 +1,6 @@
 ---
 import { ui, type Lang } from '../i18n/ui';
-import { socials } from '../data/site';
+import { socials, SITE } from '../data/site';
 interface Props { lang: Lang }
 const { lang } = Astro.props; const t = ui[lang].footer; const home = `/${lang}/`;
 ---
@@ -11,9 +11,9 @@ const { lang } = Astro.props; const t = ui[lang].footer; const home = `/${lang}/
       <p>{t.about}</p>
       <p class="ft-iso">{t.iso}</p>
     </div>
-    <nav aria-label={t.explore}><h2>{t.explore}</h2><a href={`${home}programs/`}>{t.programs}</a><a href={`${home}programs/?type=citizenship`}>{t.citizenship}</a><a href={`${home}programs/?type=residency`}>{t.residency}</a><a href={`${home}#smart-map`}>{ui[lang].header.map}</a><a href={`${home}#smart-passport`}>{ui[lang].header.passport}</a></nav>
-    <nav aria-label={t.company}><h2>{t.company}</h2><a href={`${home}#why-reach`}>{t.about_l}</a><a href={`${home}#stories`}>{t.testimonials}</a><a href={`${home}#insights`}>{t.blog}</a><a href={`${home}#consult`}>{t.contact}</a></nav>
+    <nav aria-label={t.explore}><h2>{t.explore}</h2><a href={`${home}programs/`}>{t.programs}</a><a href={`${home}citizenship-by-investment/`}>{t.citizenship}</a><a href={`${home}residency-by-investment/`}>{t.residency}</a><a href={`${home}#smart-map`}>{ui[lang].header.map}</a><a href={`${home}#smart-passport`}>{ui[lang].header.passport}</a></nav>
+    <nav aria-label={t.company}><h2>{t.company}</h2><a href={`${home}about-us/`}>{t.about_l}</a><a href={SITE.reviewsUrl} rel="noopener" target="_blank">{t.testimonials}</a><a href={SITE.blogUrl} rel="noopener" target="_blank">{t.blog}</a><a href={`${home}contact-us/`}>{t.contact}</a></nav>
     <nav aria-label={t.follow}><h2>{t.follow}</h2>{socials.map((s) => <a href={s.url} rel="noopener" target="_blank">{s.name}</a>)}</nav>
   </div>
-  <div class="container ft-base"><p>© {new Date().getFullYear()} Reach Immigration. {t.rights}</p><p><a href="#">{t.privacy}</a> · <a href="#">{t.terms}</a></p></div>
+  <div class="container ft-base"><p>© {new Date().getFullYear()} Reach Immigration. {t.rights}</p><p><a href={`${home}privacy-policy/`}>{t.privacy}</a> · <a href={`${home}terms/`}>{t.terms}</a></p></div>
 </footer>

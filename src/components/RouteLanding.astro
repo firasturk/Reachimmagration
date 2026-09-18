@@ -1,0 +1,38 @@
+---
+// Landing page for one route (citizenship / residency): promise, four proof points, the programs on that route, the form.
+import Base from '../layouts/Base.astro';
+import SectionHead from './SectionHead.astro';
+import Consult from './Consult.astro';
+import ProgramCard from './ProgramCard.astro';
+import { ui, type Lang } from '../i18n/ui';
+import { pages } from '../i18n/pages';
+import { programs, SITE, type ProgramType } from '../data/site';
+interface Props { lang: Lang; type: ProgramType }
+const { lang, type } = Astro.props; const t = ui[lang]; const r = pages[lang].routes; const c = r[type]; const home = `/${lang}/`;
+const path = `/${type === 'citizenship' ? 'citizenship-by-investment' : 'residency-by-investment'}/`;
+const list = programs.filter((p) => p.type === type);
+const art = type === 'citizenship' ? '/images/sections/route-citizenship.webp' : '/images/sections/route-residency.webp';
+const ld = { '@context': 'https://schema.org', '@type': 'ItemList', itemListElement: list.map((p, i) => ({ '@type': 'ListItem', position: i + 1, name: p[lang], url: `${SITE.url}${home}programs/${p.slug}/` })) };
+---
+<Base lang={lang} title={c.meta} description={c.desc} path={path} jsonld={[ld]}>
+  <section class="sec sec-page-head">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href={home}>{t.programs.breadcrumbHome}</a> / <a href={`${home}programs/`}>{t.header.programs}</a> / <span aria-current="page">{t.map.types[type]}</span></nav>
+      <div class="prog-head">
+        <SectionHead tag={c.tag} title={c.title} text={c.text} level="h1" />
+        <img class="prog-art rv rv-art" src={art} alt="" width="800" height="800" decoding="async" />
+      </div>
+      <div class="opt-cards rv" style="margin-top:clamp(36px,5vw,64px)">
+        {c.points.map((pt, i) => <article class="opt-card rv-up" style={`--d:${0.1 + i * 0.08}s`}><h3>{pt.t}</h3><p>{pt.p}</p></article>)}
+      </div>
+    </div>
+  </section>
+  <section class="sec tone-mist">
+    <div class="container">
+      <div class="sec-head rv"><h2 class="sec-title sm rv-lines"><span class="mask"><span>{r.compare}</span></span></h2></div>
+      <ul class="prog-grid compact rv" role="list">{list.map((p, i) => <ProgramCard p={p} lang={lang} i={i} />)}</ul>
+      <p class="cta-row"><a class="btn btn-ghost" href={`${home}programs/`}>{r.all}</a></p>
+    </div>
+  </section>
+  <Consult lang={lang} />
+</Base>

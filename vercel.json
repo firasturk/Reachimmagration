@@ -7,6 +7,116 @@
       "source": "/",
       "destination": "/en/",
       "permanent": false
+    },
+    {
+      "source": "/en/program",
+      "destination": "/en/programs/",
+      "permanent": true
+    },
+    {
+      "source": "/en/program/",
+      "destination": "/en/programs/",
+      "permanent": true
+    },
+    {
+      "source": "/ar/program",
+      "destination": "/ar/programs/",
+      "permanent": true
+    },
+    {
+      "source": "/ar/program/",
+      "destination": "/ar/programs/",
+      "permanent": true
+    },
+    {
+      "source": "/en/program/:path*",
+      "destination": "/en/programs/",
+      "permanent": true
+    },
+    {
+      "source": "/ar/program/:path*",
+      "destination": "/ar/programs/",
+      "permanent": true
+    },
+    {
+      "source": "/en/apply-now",
+      "destination": "/en/contact-us/",
+      "permanent": true
+    },
+    {
+      "source": "/en/apply-now/",
+      "destination": "/en/contact-us/",
+      "permanent": true
+    },
+    {
+      "source": "/ar/apply-now",
+      "destination": "/ar/contact-us/",
+      "permanent": true
+    },
+    {
+      "source": "/ar/apply-now/",
+      "destination": "/ar/contact-us/",
+      "permanent": true
+    },
+    {
+      "source": "/en/assessment-tool",
+      "destination": "/en/contact-us/",
+      "permanent": true
+    },
+    {
+      "source": "/en/assessment-tool/",
+      "destination": "/en/contact-us/",
+      "permanent": true
+    },
+    {
+      "source": "/ar/assessment-tool",
+      "destination": "/ar/contact-us/",
+      "permanent": true
+    },
+    {
+      "source": "/ar/assessment-tool/",
+      "destination": "/ar/contact-us/",
+      "permanent": true
+    },
+    {
+      "source": "/en/about",
+      "destination": "/en/about-us/",
+      "permanent": true
+    },
+    {
+      "source": "/en/about/",
+      "destination": "/en/about-us/",
+      "permanent": true
+    },
+    {
+      "source": "/ar/about",
+      "destination": "/ar/about-us/",
+      "permanent": true
+    },
+    {
+      "source": "/ar/about/",
+      "destination": "/ar/about-us/",
+      "permanent": true
+    },
+    {
+      "source": "/en/contact",
+      "destination": "/en/contact-us/",
+      "permanent": true
+    },
+    {
+      "source": "/en/contact/",
+      "destination": "/en/contact-us/",
+      "permanent": true
+    },
+    {
+      "source": "/ar/contact",
+      "destination": "/ar/contact-us/",
+      "permanent": true
+    },
+    {
+      "source": "/ar/contact/",
+      "destination": "/ar/contact-us/",
+      "permanent": true
     }
   ],
   "headers": [

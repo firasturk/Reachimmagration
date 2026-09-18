@@ -1,0 +1,44 @@
+---
+import Base from '../../../layouts/Base.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import Consult from '../../../components/Consult.astro';
+import { ui, langs, type Lang } from '../../../i18n/ui';
+import { pages } from '../../../i18n/pages';
+import { branches, CONTACT, SITE } from '../../../data/site';
+export const getStaticPaths = () => langs.map((lang) => ({ params: { lang } }));
+const lang = Astro.params.lang as Lang; const t = ui[lang]; const c = pages[lang].contact; const home = `/${lang}/`;
+const countries = [...new Set(branches.map((b) => b.country))];
+const tel = (s: string) => s.replace(/[^\d+]/g, '');
+const ld = { '@context': 'https://schema.org', '@type': 'ContactPage', name: c.meta, url: `${SITE.url}${home}contact-us/`, mainEntity: { '@id': `${SITE.url}/#org`, telephone: CONTACT.phones[0], email: CONTACT.email, address: { '@type': 'PostalAddress', streetAddress: '14 King Faisal Bin Abdulaziz Street, Umm Uthaina', addressLocality: 'Amman', addressCountry: 'JO' } } };
+---
+<Base lang={lang} title={c.meta} description={c.desc} path="/contact-us/" jsonld={[ld]}>
+  <section class="sec sec-page-head">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href={home}>{t.programs.breadcrumbHome}</a> / <span aria-current="page">{t.footer.contact}</span></nav>
+      <div class="two-col">
+        <SectionHead tag={c.tag} title={c.title} text={c.text} level="h1" />
+        <div class="rv rv-up" style="--d:.15s">
+          <h2 class="sec-title sm" style="margin-bottom:22px">{c.hq}</h2>
+          <dl class="info-list">
+            <div><dt>{c.address}</dt><dd>{CONTACT.address[lang]}<a href={CONTACT.mapUrl} rel="noopener" target="_blank">{c.directions}</a></dd></div>
+            <div><dt>{c.phone}</dt><dd>{CONTACT.phones.map((p) => <a href={`tel:${tel(p)}`} dir="ltr">{p}</a>)}</dd></div>
+            <div><dt>{c.whatsapp}</dt><dd><a href={`https://wa.me/${CONTACT.whatsapp}`} rel="noopener" target="_blank" dir="ltr">+{CONTACT.whatsapp}</a></dd></div>
+            <div><dt>{c.email}</dt><dd><a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a></dd></div>
+            <div><dt>{c.hours}</dt><dd>{c.hoursValue}</dd></div>
+          </dl>
+          <p class="cta-row"><a class="btn btn-solid" href={`tel:${tel(CONTACT.phones[0])}`}>{c.call}</a><a class="btn btn-ghost" href={`https://wa.me/${CONTACT.whatsapp}`} rel="noopener" target="_blank">{c.chat}</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="sec tone-mist">
+    <div class="container">
+      <SectionHead tag={pages[lang].about.branchesTag} title={c.branchesTitle} text={c.branchesText} />
+      <div class="branch-grid rv">
+        {countries.map((co, i) => <div class:list={['branch rv-up', { hq: i === 0 }]} style={`--d:${0.1 + i * 0.05}s`}><b>{branches.find((b) => b.country === co)![lang].split(' — ')[0]}</b><span>{branches.filter((b) => b.country === co).map((b) => b[lang].split(' — ')[1] ?? b[lang]).join(' · ')}</span></div>)}
+      </div>
+      <p class="prog-updated">{c.branchNote}</p>
+    </div>
+  </section>
+  <Consult lang={lang} />
+</Base>

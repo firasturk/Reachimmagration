@@ -1,0 +1,7 @@
+---
+import RouteLanding from '../../../components/RouteLanding.astro';
+import { langs, type Lang } from '../../../i18n/ui';
+export const getStaticPaths = () => langs.map((lang) => ({ params: { lang } }));
+const lang = Astro.params.lang as Lang;
+---
+<RouteLanding lang={lang} type="residency" />

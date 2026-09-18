@@ -99,4 +99,15 @@ export const SITE = {
   founded: '2000',
   minInvestmentUsd: 150000,
   google: { rating: '5.0', reviews: 86 },
+  reviewsUrl: 'https://reachimmigration.com/en/reviews/',
+  blogUrl: 'https://reachimmigration.com/en/blog/',
+};
+
+// Head office, from the client's contact page. Branch phone numbers and addresses are added to `branches` as the client supplies them.
+export const CONTACT = {
+  address: { en: '3rd floor, 14 King Faisal Bin Abdulaziz Street, Umm Uthaina, Amman, Jordan', ar: 'الطابق الثالث، 14 شارع الملك فيصل بن عبد العزيز، أم أذينة، عمّان، الأردن' },
+  mapUrl: 'https://www.google.com/maps/search/?api=1&query=Reach+Immigration+Umm+Uthaina+Amman',
+  phones: ['+962 6 552 1114', '+962 79 063 1087'],
+  whatsapp: '962790631087',           // digits only, used for wa.me links — confirm with the client before launch
+  email: 'info@reachimmigration.com',
 };
