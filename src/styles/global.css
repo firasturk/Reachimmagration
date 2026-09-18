@@ -627,3 +627,44 @@ html[lang="ar"] .road-card h3{font-weight:600;text-transform:none;font-size:18px
   .road-card{position:static;width:auto;text-align:start;transform:none}
 }
 @media (prefers-reduced-motion:reduce){.road{--p:1}.road-card,.road-dot{transition:none}.road-node .road-card{opacity:1}}
+
+/* SMART PASSPORT — richer pages: guilloché, silhouette, flag, inked stamp, entry stamps, figures, flag strip */
+.pp-defs{position:absolute;width:0;height:0;overflow:hidden}
+.pp-guil{position:absolute;inset:0;width:100%;height:100%;fill:var(--wine-500);opacity:.055;pointer-events:none}
+.pp-sil{position:absolute;inset:8% 6% 6% 6%;width:88%;height:86%;fill:var(--wine-300);opacity:.16;pointer-events:none}
+.pp-flag{position:absolute;inset-inline-end:7%;top:7%;border-radius:4px;box-shadow:0 1px 3px rgba(60,30,40,.25)}
+.pp-entry{position:absolute;padding:5px 9px;border:1.5px solid var(--slate-500);color:var(--slate-500);font:600 clamp(7px,.75vw,9px)/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;rotate:var(--rot,-8deg);opacity:.32;mix-blend-mode:multiply;white-space:nowrap}
+.pp-entry.e1{left:9%;top:12%}
+.pp-entry.e2{right:8%;bottom:11%;border-radius:999px;border-style:double;border-width:3px}
+.pp-stamp{color:var(--wine-600);mix-blend-mode:multiply;opacity:.9}
+.pp-stamp svg{fill:none;stroke:currentColor}
+.pp-stamp text.pp-arc{fill:currentColor;stroke:none;font:600 11px/1 var(--font-display);letter-spacing:.18em;text-transform:uppercase}
+html[lang="ar"] .pp-stamp text.pp-arc{letter-spacing:.02em;font-size:12.5px;font-family:var(--font-display-ar)}
+.pp-stamp strong{position:relative;font-size:clamp(12px,1.55vw,17px)}
+.pp-stamp .pp-stamp-bottom{position:relative}
+.pp-badge{margin:-4% 0 5%;text-decoration:none;font-size:11px;padding:6px 10px}
+.pp-details h3{display:flex;align-items:center;gap:8px}
+.pp-details h3 .flag{border-radius:4px;flex:none}
+.pp-details dl{gap:7px}
+.pp-details dl div{padding-bottom:6px}
+.pp-details dd{line-height:1.3}
+.pp-reach dd b{font:400 1.45em/1 var(--font-display);color:var(--brand-accent)}
+.pp-reach dd a{color:var(--brand-accent)}
+/* the book: page stack on the free edge, a spine shadow on every paper face, a cast shadow while a leaf turns */
+.book-base.is-right::after{content:"";position:absolute;inset-block:2%;inset-inline-end:0;width:9px;background:repeating-linear-gradient(to left,rgba(90,60,66,.18) 0 1px,transparent 1px 3px);opacity:.7;pointer-events:none}
+.face.paper::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(60,30,40,.16),rgba(60,30,40,.05) 7%,transparent 16%)}
+.face.back.paper::before{background:linear-gradient(270deg,rgba(60,30,40,.16),rgba(60,30,40,.05) 7%,transparent 16%)}
+[dir="rtl"] .face.paper::before{background:linear-gradient(270deg,rgba(60,30,40,.16),rgba(60,30,40,.05) 7%,transparent 16%)}
+[dir="rtl"] .face.back.paper::before{background:linear-gradient(90deg,rgba(60,30,40,.16),rgba(60,30,40,.05) 7%,transparent 16%)}
+.face{transition:box-shadow .6s}
+.leaf.moving .face{box-shadow:0 24px 50px -18px rgba(40,14,22,.55)}
+/* flag strip replaces the select */
+.pp-strip{display:flex;gap:6px;max-width:min(640px,70vw);overflow-x:auto;scrollbar-width:none;padding:6px 4px;scroll-snap-type:x proximity}
+.pp-strip::-webkit-scrollbar{display:none}
+.pp-chip{flex:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--paper);display:grid;place-items:center;cursor:pointer;opacity:.62;transition:opacity .25s,transform .35s var(--spring),border-color .25s,box-shadow .25s;scroll-snap-align:center}
+.pp-chip .flag{border-radius:3px}
+.pp-chip:hover{opacity:1}
+.pp-chip.on{opacity:1;transform:scale(1.14);border-color:var(--wine-500);box-shadow:0 8px 20px -10px rgba(58,26,38,.5)}
+.pp-chip.is-cover span{width:18px;height:24px;border-radius:2px 5px 5px 2px;background:linear-gradient(135deg,#7a1a33,#4a1626)}
+@media (max-width:700px){.pp-strip{max-width:calc(100vw - 150px)}.pp-details dl{gap:6px}.pp-badge{font-size:12px}}
+@media (max-width:700px){.pp-details h3{margin:6% 0 4%}.pp-details dl{font-size:13px;gap:4px}.pp-details dl div{padding-bottom:5px}.pp-badge{margin:-2% 0 4%}.pp-actions{padding-top:6px}.pp-mrz{margin-top:6px}}

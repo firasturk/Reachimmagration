@@ -3,7 +3,7 @@ export function initPassport() {
   const book = document.getElementById('book'); if (!book) return;
   const leaves = Array.from(book.querySelectorAll<HTMLElement>('.leaf'));
   const count = leaves.length;                                       // cover + one leaf per program
-  const jump = document.getElementById('bookJump') as HTMLSelectElement | null;
+  const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('.pp-chip[data-jump]'));
   const endPage = book.querySelector<HTMLElement>('.book-base.is-right');
   let turned = 0;
 
@@ -19,7 +19,7 @@ export function initPassport() {
     });
     if (endPage) endPage.inert = turned !== count;
     book.dataset.turned = String(turned);
-    if (jump) jump.value = String(Math.min(turned, count - 1));
+    chips.forEach((c) => { const on = Number(c.dataset.jump) === turned; c.classList.toggle('on', on); c.setAttribute('aria-pressed', String(on)); if (on) c.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' }); });
   };
   const go = (n: number) => { const from = turned; turned = Math.max(0, Math.min(count, n)); if (turned !== from) paint(from); };
 
@@ -28,6 +28,6 @@ export function initPassport() {
     if ((e.target as HTMLElement).closest('a,button,select')) return;
     go(leaf.classList.contains('turned') ? i : i + 1);
   }));
-  jump?.addEventListener('change', () => go(Number(jump.value)));
+  chips.forEach((c) => c.addEventListener('click', (e) => { e.stopPropagation(); go(Number(c.dataset.jump)); }));
   paint(0);
 }

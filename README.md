@@ -30,7 +30,7 @@ npm run build      # الناتج بمجلد dist/
 | `src/data/site.ts` | البرامج العشرين، الفروع الـ 17، الجنسيات، التراخيص، السوشال، المقالات، وقصص العملاء (فاضية). |
 | `src/components/Hero.astro` + `src/styles/hero.css` + `src/scripts/hero.ts` | الهيرو (ثيم 04) زي ما انعتمد بالمعاينة: ديسكتوب + موبايل + باترن الماوس. **لا تعدّل الأرقام بالعين.** صور كروت الهيرو بـ `public/images/hero/card-*.webp` (النسخ المقصوصة عن قصد)، وصور الأقسام الكاملة بـ `public/images/sections/route-*.webp` و `art-*.webp`. |
 | `src/components/SmartMap.astro` + `src/scripts/map.ts` | الخريطة الذكية: كرة أرضية (d3-geo على canvas) مربوطة بكاروسيل البلدان. |
-| `src/components/SmartPassport.astro` + `src/scripts/passport.ts` | الجواز الذكي: كتاب CSS 3D، كل صفحتين برنامج. بالعربي بينفتح من اليمين. |
+| `src/components/SmartPassport.astro` + `src/scripts/passport.ts` | الجواز الذكي: كتاب CSS 3D، كل صفحتين برنامج. بالعربي بينفتح من اليمين. صفحة الختم فيها نقشة من وردة البراند (`src/data/motifs.ts`)، وسلويت الدولة بينرسم وقت البناء من Natural Earth 50m، والعلم، وختم حبر (فلتر SVG)، وختمي دخول باهتين. صفحة التفاصيل بتسحب الحد الأدنى والمدة من `src/data/programs/` (أول جملة بس) ومدى الجواز من مؤشر الجوازات. التنقل بشريط أعلام. |
 | `src/components/Consult.astro` + `src/scripts/form.ts` | الفورم الذكي (4 خطوات). |
 | `api/lead.ts` | دالة Vercel بتستقبل الفورم وبتحوّله للـ CRM. |
 | `src/pages/[lang]/…` | الصفحات: `programs/` و `programs/[slug]/` و `citizenship-by-investment/` و `residency-by-investment/` و `about-us/` و `contact-us/` و `privacy-policy/` و `terms/`. المسارات نفسها بالإنجليزي والعربي. |

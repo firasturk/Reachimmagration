@@ -1,16 +1,57 @@
 ---
 // Smart Passport: a CSS-3D book. Leaf 0 is the cover; every following spread is one program (stamp page + details page).
 // In Arabic the book opens from the other side, like an Arabic passport. Logic: scripts/passport.ts.
+// Stamp pages carry a guilloché of the brand rosette, the country's silhouette (drawn at build time from Natural Earth
+// 50m via d3-geo), the flag, an inked stamp and faint entry stamps. Detail pages add the headline figures from data/programs.
 import SectionHead from './SectionHead.astro';
+import Flag from './Flag.astro';
 import { ui, type Lang } from '../i18n/ui';
-import { programs } from '../data/site';
+import { programs, type Program } from '../data/site';
+import { programContent } from '../data/programs';
+import pi from '../data/passport-index.json';
+import { rm1 } from '../data/motifs';
+import { geoNaturalEarth1, geoPath, geoArea } from 'd3-geo';
+import { feature } from 'topojson-client';
+import world from 'world-atlas/countries-50m.json';
 interface Props { lang: Lang }
 const { lang } = Astro.props; const t = ui[lang].passport; const m = ui[lang].map; const home = `/${lang}/`;
 const N = programs.length;
 const mrz = (s: string) => ('P<REACH<<' + s.toUpperCase().replace(/[^A-Z]+/g, '<')).padEnd(34, '<').slice(0, 34);
 const tilt = [-9, 7, -5, 11, -12, 6, -7, 9, -4, 12, -10, 5, -8, 8, -6, 10, -11, 4, -9, 7];
+
+// country silhouette: the largest polygon of the country, fitted into a 200×200 box
+const countries = (feature(world as any, (world as any).objects.countries) as any).features as any[];
+const silhouette = (p: Program) => {
+  const f = countries.find((c) => String(c.id).padStart(3, '0') === p.iso);
+  if (!f) return '';
+  const polys: any[] = f.geometry.type === 'MultiPolygon' ? f.geometry.coordinates.map((c: any) => ({ type: 'Polygon', coordinates: c })) : [f.geometry];
+  const main = polys.reduce((a, b) => (geoArea(b) > geoArea(a) ? b : a));
+  const proj = geoNaturalEarth1().fitSize([200, 200], main as any);
+  return geoPath(proj)(main as any) ?? '';
+};
+// headline facts from the program copy, by label
+// passport pages have room for one clause: keep the first clause, cap it, and leave the full sentence to the program page
+const short = (v: string) => { const c = v.split(/;|؛/)[0].trim(); return c.length > 64 ? c.slice(0, 61).trimEnd() + '…' : c; };
+const fact = (p: Program, en: string, ar: string) => { const v = programContent[p.slug]?.[lang].facts.find((f) => f.l.startsWith(lang === 'ar' ? ar : en))?.v; return v ? short(v) : ''; };
+const reach = (p: Program) => pi.passports.find((x) => x.c === p.iso2)?.score;
+const entryDates = ['12 MAR 2026', '04 JUN 2026', '21 SEP 2025', '08 JAN 2026', '17 NOV 2025'];
 ---
 <section class="sec sec-passport tone-mist" id="smart-passport" aria-labelledby="ppTitle">
+  <svg class="pp-defs" width="0" height="0" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="ppRosette" viewBox={rm1.viewBox}><path d={rm1.d} /></symbol>
+      <pattern id="ppGuil" patternUnits="userSpaceOnUse" width="96" height="96" patternTransform="rotate(12)">
+        <use href="#ppRosette" x="4" y="4" width="40" height="40" /><use href="#ppRosette" x="52" y="52" width="40" height="40" />
+        <use href="#ppRosette" x="52" y="4" width="18" height="18" opacity=".6" /><use href="#ppRosette" x="4" y="52" width="18" height="18" opacity=".6" />
+      </pattern>
+      <filter id="ppInk" x="-10%" y="-10%" width="120%" height="120%">
+        <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7" result="n" />
+        <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2.2 1.9" result="m" />
+        <feComposite in="SourceGraphic" in2="m" operator="in" result="ink" />
+        <feDisplacementMap in="ink" in2="n" scale="1.6" xChannelSelector="R" yChannelSelector="G" />
+      </filter>
+    </defs>
+  </svg>
   <div class="container">
     <SectionHead tag={t.tag} title={t.title} text={t.text} center id="ppTitle" />
     <div class="book-stage rv rv-up" style="--d:.15s">
@@ -26,6 +67,7 @@ const tilt = [-9, 7, -5, 11, -12, 6, -7, 9, -4, 12, -10, 5, -8, 8, -6, 10, -11, 
         {Array.from({ length: N + 1 }, (_, i) => {
           const front = i === 0 ? null : programs[i - 1];
           const back = i < N ? programs[i] : null;
+          const r = front ? reach(front) : undefined;
           return (
             <div class="leaf" data-i={i} style={`--i:${i}`}>
               <div class:list={['face front', i === 0 ? 'cover' : 'paper']}>
@@ -39,11 +81,15 @@ const tilt = [-9, 7, -5, 11, -12, 6, -7, 9, -4, 12, -10, 5, -8, 8, -6, 10, -11, 
                 ) : front && (
                   <article class="pp-details">
                     <header><p class="pp-label">{t.stamp}</p><p class="pp-no">{String(i).padStart(2, '0')} / {N}</p></header>
-                    <h3>{front[lang]}</h3>
+                    <h3><Flag code={front.iso2} size={26} /> {front[lang]}</h3>
+                    {front.licensed && <a class="badge pp-badge" href={front.licensed} rel="noopener" target="_blank">{t.agentYes}</a>}
                     <dl>
                       <div><dt>{t.route}</dt><dd>{m.types[front.type]}</dd></div>
-                      <div><dt>{t.region}</dt><dd>{m.regions[front.region]}</dd></div>
-                      <div><dt>{t.agent}</dt><dd>{front.licensed ? <a href={front.licensed} rel="noopener" target="_blank">{t.agentYes}</a> : t.agentNo}</dd></div>
+                      {fact(front, 'Minimum investment', 'الحد الأدنى') && <div><dt>{t.min}</dt><dd>{fact(front, 'Minimum investment', 'الحد الأدنى')}</dd></div>}
+                      {fact(front, 'Time to', 'مدة الحصول') && <div><dt>{t.time}</dt><dd>{fact(front, 'Time to', 'مدة الحصول')}</dd></div>}
+                      {front.type === 'citizenship' && r ? (
+                        <div class="pp-reach"><dt>{t.reach}</dt><dd><b>{r}</b> {t.destinations} · <a href={`${home}passport-index/`}>{t.compare}</a></dd></div>
+                      ) : fact(front, 'Presence required', 'الحضور المطلوب') && <div><dt>{t.presence}</dt><dd>{fact(front, 'Presence required', 'الحضور المطلوب')}</dd></div>}
                     </dl>
                     <div class="pp-actions">
                       <a class="btn btn-solid btn-sm" href="#consult" data-assess={front.slug}>{t.assess}</a>
@@ -55,12 +101,27 @@ const tilt = [-9, 7, -5, 11, -12, 6, -7, 9, -4, 12, -10, 5, -8, 8, -6, 10, -11, 
               </div>
               <div class="face back paper" aria-hidden="true">
                 {back && (
-                  <div class="pp-stamp" style={`--tilt:${tilt[i % tilt.length]}deg`}>
-                    <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="92" /><circle cx="100" cy="100" r="80" stroke-dasharray="3 5" /><circle cx="100" cy="100" r="46" /></svg>
-                    <span class="pp-stamp-top">REACH · {m.regions[back.region]}</span>
-                    <strong>{back[lang]}</strong>
-                    <span class="pp-stamp-bottom">{m.types[back.type]}</span>
-                  </div>
+                  <>
+                    <svg class="pp-guil"><rect width="100%" height="100%" fill="url(#ppGuil)" /></svg>
+                    <svg class="pp-sil" viewBox="-10 -10 220 220"><path d={silhouette(back)} /></svg>
+                    <Flag class="pp-flag" code={back.iso2} size={30} />
+                    <p class="pp-entry e1" style={`--rot:${tilt[(i + 3) % tilt.length]}deg`}>ENTRY · {entryDates[i % entryDates.length]}</p>
+                    <p class="pp-entry e2" style={`--rot:${tilt[(i + 6) % tilt.length]}deg`}>ADMITTED · {entryDates[(i + 2) % entryDates.length]}</p>
+                    <div class="pp-stamp" style={`--tilt:${tilt[i % tilt.length]}deg`}>
+                      <svg viewBox="0 0 200 200">
+                        <defs><path id={`ppArcT${i}`} d="M30,100 a70,70 0 1,1 140,0" /><path id={`ppArcB${i}`} d="M30,100 a70,70 0 0,0 140,0" /></defs>
+                        <g filter="url(#ppInk)">
+                          <circle cx="100" cy="100" r="94" stroke-width="3.5" />
+                          <circle cx="100" cy="100" r="88" stroke-width="2" stroke-dasharray="1.5 3.2" />
+                          <circle cx="100" cy="100" r="52" stroke-width="2.2" />
+                          <text class="pp-arc"><textPath href={`#ppArcT${i}`} startOffset="50%" text-anchor="middle">{t.stampShort} · {m.regions[back.region]}</textPath></text>
+                          <text class="pp-arc"><textPath href={`#ppArcB${i}`} startOffset="50%" text-anchor="middle">{back.licensed ? t.licensedStamp : t.issued} · 2026</textPath></text>
+                        </g>
+                      </svg>
+                      <strong>{back[lang]}</strong>
+                      <span class="pp-stamp-bottom">{m.types[back.type]}</span>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
@@ -70,8 +131,10 @@ const tilt = [-9, 7, -5, 11, -12, 6, -7, 9, -4, 12, -10, 5, -8, 8, -6, 10, -11, 
     </div>
     <div class="book-ctrl rv rv-up" style="--d:.25s">
       <button type="button" class="car-btn" data-book="prev" aria-label={t.prev}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg></button>
-      <label class="sr-only" for="bookJump">{t.jump}</label>
-      <select id="bookJump" class="select"><option value="0">{t.cover}</option>{programs.map((p, i) => <option value={i + 1}>{String(i + 1).padStart(2, '0')} · {p[lang]}</option>)}</select>
+      <div class="pp-strip" role="group" aria-label={t.jump}>
+        <button type="button" class="pp-chip is-cover" data-jump="0" aria-label={t.cover} title={t.cover}><span></span></button>
+        {programs.map((p, i) => <button type="button" class="pp-chip" data-jump={i + 1} aria-label={p[lang]} title={p[lang]}><Flag code={p.iso2} size={32} /></button>)}
+      </div>
       <button type="button" class="car-btn" data-book="next" aria-label={t.next}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg></button>
     </div>
   </div>

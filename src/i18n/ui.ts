@@ -62,6 +62,7 @@ const en = {
     coverTop: 'REACH IMMIGRATION', coverBottom: 'SMART PASSPORT', page: 'Page',
     stamp: 'DESTINATION', route: 'Route', region: 'Region', agent: 'Reach status', agentYes: 'Government-listed agent', agentNo: 'Advisory & filing',
     details: 'Program details', assess: 'Assess my case',
+    min: 'Minimum investment', time: 'Timeline', presence: 'Presence', reach: 'Passport reach', destinations: 'destinations', compare: 'Compare passports', issued: 'ISSUED', licensedStamp: 'AUTHORISED AGENT', stampBrand: 'REACH IMMIGRATION', stampShort: 'REACH',
     endTitle: 'Ready for the next page?', endText: 'Tell us about your goals and a consultant will map the right program for your family.', endCta: 'Start my assessment',
   },
   why: {
@@ -164,6 +165,7 @@ const ar: typeof en = {
     coverTop: 'ريتش للهجرة', coverBottom: 'الجواز الذكي', page: 'صفحة',
     stamp: 'الوجهة', route: 'المسار', region: 'المنطقة', agent: 'صفة ريتش', agentYes: 'وكيل مُدرج لدى الحكومة', agentNo: 'استشارة وتقديم الملف',
     details: 'تفاصيل البرنامج', assess: 'قيّم حالتي',
+    min: 'الحد الأدنى للاستثمار', time: 'المدة', presence: 'الحضور', reach: 'مدى الجواز', destinations: 'وجهة', compare: 'قارن الجوازات', issued: 'صدر', licensedStamp: 'وكيل معتمد', stampBrand: 'ريتش للهجرة', stampShort: 'ريتش',
     endTitle: 'جاهز للصفحة التالية؟', endText: 'حدّثنا عن أهدافك ليرسم لك أحد مستشارينا البرنامج المناسب لعائلتك.', endCta: 'ابدأ التقييم',
   },
   why: {
