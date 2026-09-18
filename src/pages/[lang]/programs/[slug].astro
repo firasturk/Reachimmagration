@@ -5,6 +5,7 @@ import Base from '../../../layouts/Base.astro';
 import SectionHead from '../../../components/SectionHead.astro';
 import Consult from '../../../components/Consult.astro';
 import ProgramCard from '../../../components/ProgramCard.astro';
+import Flag from '../../../components/Flag.astro';
 import { ui, langs, type Lang } from '../../../i18n/ui';
 import { pages } from '../../../i18n/pages';
 import { programs, SITE } from '../../../data/site';
@@ -28,7 +29,7 @@ const routeHref = `${home}${p.type === 'citizenship' ? 'citizenship-by-investmen
     <div class="container">
       <nav class="crumbs" aria-label="Breadcrumb"><a href={home}>{t.programs.breadcrumbHome}</a> / <a href={`${home}programs/`}>{t.header.programs}</a> / <a href={routeHref}>{typeLabel}</a> / <span aria-current="page">{p[lang]}</span></nav>
       <div class="prog-head">
-        <SectionHead tag={`[ ${t.map.regions[p.region]} ]`} title={[p[lang]]} text={copy?.tagline ?? typeLabel} level="h1" />
+        <div><p class="prog-flag"><Flag code={p.iso2} size={44} /></p><SectionHead tag={`[ ${t.map.regions[p.region]} ]`} title={[p[lang]]} text={copy?.tagline ?? typeLabel} level="h1" /></div>
         <img class="prog-art rv rv-art" src={art} alt="" width="800" height="800" decoding="async" />
       </div>
       <div class="prog-body">

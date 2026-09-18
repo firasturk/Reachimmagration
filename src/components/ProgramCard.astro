@@ -2,13 +2,14 @@
 // One program card, shared by the programs index, the route landings and the "other programs" strip on program pages.
 import { ui, type Lang } from '../i18n/ui';
 import type { Program } from '../data/site';
+import Flag from './Flag.astro';
 interface Props { p: Program; lang: Lang; i?: number }
 const { p, lang, i = 0 } = Astro.props; const t = ui[lang].map; const home = `/${lang}/`;
 ---
 <li class="rv-up" data-type={p.type} style={`--d:${Math.min(i, 8) * 0.04}s`}>
   <a class="prog" href={`${home}programs/${p.slug}/`}>
     <p class="ccard-region">{t.regions[p.region]}</p>
-    <h2>{p[lang]}</h2>
+    <h2><Flag code={p.iso2} size={26} /> {p[lang]}</h2>
     <p class="ccard-type">{t.types[p.type]}</p>
     {p.licensed && <p class="badge">{t.licensed}</p>}
     <span class="link-arrow">{t.view}</span>

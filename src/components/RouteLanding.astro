@@ -4,6 +4,7 @@ import Base from '../layouts/Base.astro';
 import SectionHead from './SectionHead.astro';
 import Consult from './Consult.astro';
 import ProgramCard from './ProgramCard.astro';
+import Roadmap from './Roadmap.astro';
 import { ui, type Lang } from '../i18n/ui';
 import { pages } from '../i18n/pages';
 import { programs, SITE, type ProgramType } from '../data/site';
@@ -27,6 +28,7 @@ const ld = { '@context': 'https://schema.org', '@type': 'ItemList', itemListElem
       </div>
     </div>
   </section>
+  {type === 'citizenship' && <Roadmap lang={lang} tag={r.citizenship.roadmap.tag} title={r.citizenship.roadmap.title} steps={r.citizenship.roadmap.steps} />}
   <section class="sec tone-mist">
     <div class="container">
       <div class="sec-head rv"><h2 class="sec-title sm rv-lines"><span class="mask"><span>{r.compare}</span></span></h2></div>

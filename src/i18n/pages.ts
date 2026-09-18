@@ -17,6 +17,14 @@ const en = {
         { t: 'For generations', p: 'Citizenship passes to children born after approval, and dependants join the first application.' },
         { t: 'Filed by a licensed agent', p: 'Six governments list Reach as an authorised agent. Your file goes in through us, not a middleman.' },
       ],
+      roadmap: { tag: '[ The Road ]', title: ['Your Road To', 'A Second Passport'], steps: [
+        { t: 'Free assessment', p: 'A consultant maps your goals, budget and family to the programs that fit.' },
+        { t: 'Program and route', p: 'You choose the country and the investment route; every cost is quoted in writing.' },
+        { t: 'File and due diligence', p: 'We prepare the documents; the government runs its background checks.' },
+        { t: 'Investment', p: 'On approval in principle you complete the contribution or the purchase.' },
+        { t: 'Citizenship approved', p: 'The certificate of citizenship is issued for you and your dependants.' },
+        { t: 'Passports in hand', p: 'Passports delivered to your branch. Renewals and the next generation stay with us.' },
+      ] },
     },
     residency: {
       title: ['Residency', 'By Investment'], tag: '[ Live Abroad ]',
@@ -63,7 +71,7 @@ const en = {
     tag: '[ Contact ]', title: ['Talk To', 'A Consultant'],
     text: 'Call the head office, message us on WhatsApp, or leave your details below and the branch nearest you calls you back. Consultations are free and in your language.',
     hq: 'Head office', address: 'Address', phone: 'Phone', whatsapp: 'WhatsApp', email: 'Email', hours: 'Opening hours', hoursValue: 'Saturday to Thursday, 9:00–17:30 · Closed on Friday', directions: 'Open in Google Maps', call: 'Call now', chat: 'Chat on WhatsApp',
-    branchesTitle: ['Our', 'Branches'], branchesText: 'Seventeen offices in nine countries. Call the one nearest you, or choose it in the form and a consultant from that office will call you back.',
+    branchesTitle: ['Our', 'Branches'], mapTitle: 'Map of Reach Immigration branches', branchesText: 'Seventeen offices in nine countries. Call the one nearest you, or choose it in the form and a consultant from that office will call you back.',
   },
   legal: {
     privacyMeta: 'Privacy Policy | Reach Immigration', termsMeta: 'Terms of Use | Reach Immigration', privacyTitle: ['Privacy', 'Policy'], termsTitle: ['Terms', 'Of Use'], tag: '[ Legal ]', updated: 'Last updated',
@@ -98,6 +106,14 @@ const ar: typeof en = {
         { t: 'لأجيال', p: 'تنتقل الجنسية إلى الأبناء المولودين بعد الموافقة، ويُضمّ المعالون في الطلب الأول.' },
         { t: 'بيد وكيل مرخّص', p: 'ست حكومات تُدرج ريتش وكيلاً معتمداً. ملفك يُقدَّم عبرنا مباشرة لا عبر وسيط.' },
       ],
+      roadmap: { tag: '[ الطريق ]', title: ['طريقك إلى', 'جواز سفر ثانٍ'], steps: [
+        { t: 'تقييم مجاني', p: 'يربط المستشار أهدافك وميزانيتك وعائلتك بالبرامج المناسبة.' },
+        { t: 'البرنامج والمسار', p: 'تختار البلد ومسار الاستثمار، وتُكتب كل التكاليف مسبقاً.' },
+        { t: 'الملف والتدقيق', p: 'نجهّز الوثائق، وتُجري الحكومة فحوصاتها الأمنية.' },
+        { t: 'الاستثمار', p: 'بعد الموافقة المبدئية تُكمل المساهمة أو الشراء.' },
+        { t: 'الموافقة على الجنسية', p: 'تصدر شهادة الجنسية لك ولمن تعيلهم.' },
+        { t: 'الجوازات بين يديك', p: 'تُسلَّم الجوازات في فرعك. التجديدات والجيل التالي يبقون معنا.' },
+      ] },
     },
     residency: {
       title: ['الإقامة', 'عن طريق الاستثمار'], tag: '[ عِش في الخارج ]',
@@ -144,7 +160,7 @@ const ar: typeof en = {
     tag: '[ تواصل معنا ]', title: ['تحدّث إلى', 'مستشار'],
     text: 'اتصل بالمقر الرئيسي، أو راسلنا عبر واتساب، أو اترك بياناتك أدناه ليتصل بك أقرب فرع إليك. الاستشارة مجانية وبلغتك.',
     hq: 'المقر الرئيسي', address: 'العنوان', phone: 'الهاتف', whatsapp: 'واتساب', email: 'البريد الإلكتروني', hours: 'ساعات العمل', hoursValue: 'السبت إلى الخميس، 9:00 – 17:30 · الجمعة عطلة', directions: 'افتح في خرائط Google', call: 'اتصل الآن', chat: 'راسلنا عبر واتساب',
-    branchesTitle: ['فروعنا', ''], branchesText: 'سبعة عشر مكتباً في تسع دول. اتصل بأقرب فرع إليك، أو اختره في النموذج ليتصل بك مستشار من ذلك المكتب.',
+    branchesTitle: ['فروعنا', ''], mapTitle: 'خريطة فروع ريتش للهجرة', branchesText: 'سبعة عشر مكتباً في تسع دول. اتصل بأقرب فرع إليك، أو اختره في النموذج ليتصل بك مستشار من ذلك المكتب.',
   },
   legal: {
     privacyMeta: 'سياسة الخصوصية | ريتش للهجرة', termsMeta: 'شروط الاستخدام | ريتش للهجرة', privacyTitle: ['سياسة', 'الخصوصية'], termsTitle: ['شروط', 'الاستخدام'], tag: '[ قانوني ]', updated: 'آخر تحديث',

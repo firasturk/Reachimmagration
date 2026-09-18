@@ -11,13 +11,13 @@ export function initPassportIndex() {
   const cards = document.getElementById('piCards')!, gain = document.getElementById('piGainBody')!;
   const byCode = new Map(data.passports.map((p) => [p.c, p]));
   const programs: Record<string, string> = JSON.parse(tool.dataset.programs ?? '{}');
-  const flag = (c: string) => String.fromCodePoint(...[...c].map((ch) => 0x1f1e6 + ch.charCodeAt(0) - 65));
+  const flag = (c: string) => `<img class="flag" src="/images/flags/${c.toLowerCase()}.svg" alt="" width="28" height="21">`;
   const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]!));
 
   const card = (p: P, label: string) => `
     <article class="pi-card">
       <p class="pi-card-label">${esc(label)}</p>
-      <h3><span aria-hidden="true">${flag(p.c)}</span> ${esc(p[lang])}</h3>
+      <h3>${flag(p.c)} ${esc(p[lang])}</h3>
       <p class="pi-big"><b>${p.score}</b> <span>${esc(t.destinations!)}</span> · <span>${esc(t.rank!)} ${p.rank}</span></p>
       <dl class="pi-break">
         <div><dt>${esc(t.vf!)}</dt><dd>${p.f}</dd></div><div><dt>${esc(t.voa!)}</dt><dd>${p.o}</dd></div><div><dt>${esc(t.eta!)}</dt><dd>${p.a}</dd></div>

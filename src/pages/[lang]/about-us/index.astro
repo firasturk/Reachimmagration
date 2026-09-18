@@ -15,7 +15,7 @@ const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', it
   <section class="sec sec-page-head">
     <div class="container">
       <nav class="crumbs" aria-label="Breadcrumb"><a href={home}>{t.programs.breadcrumbHome}</a> / <span aria-current="page">{t.footer.about_l}</span></nav>
-      <SectionHead tag={a.tag} title={a.title} text={a.text} level="h1" />
+      <div class="prog-head"><SectionHead tag={a.tag} title={a.title} text={a.text} level="h1" /><img class="prog-art rv rv-art" src="/images/sections/art-skilled-workers.webp" alt="" width="800" height="800" decoding="async" /></div>
       <div class="stat-grid rv">{a.stats.map((s, i) => <div class="stat rv-up" style={`--d:${0.1 + i * 0.06}s`}><b>{s.n}</b><span>{s.l}</span></div>)}</div>
     </div>
   </section>
@@ -33,7 +33,7 @@ const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', it
   </section>
   <section class="sec tone-mist">
     <div class="container two-col">
-      <SectionHead tag={a.stepsTag} title={a.stepsTitle} motion="slide" />
+      <div><SectionHead tag={a.stepsTag} title={a.stepsTitle} motion="slide" /><img class="side-art rv rv-art" src="/images/sections/art-investment.webp" alt="" width="800" height="800" loading="lazy" decoding="async" /></div>
       <ol class="steps named rv">{a.steps.map((s, i) => <li class="rv-up" style={`--d:${0.1 + i * 0.08}s`}><h3>{s.t}</h3><p>{s.p}</p></li>)}</ol>
     </div>
   </section>

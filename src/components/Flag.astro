@@ -1,0 +1,6 @@
+---
+// Country flag as an inline SVG image (flag-icons, MIT) — emoji flags do not render on Windows.
+interface Props { code: string; size?: number; class?: string }
+const { code, size = 22, class: cls } = Astro.props;
+---
+<img class:list={['flag', cls]} src={`/images/flags/${code.toLowerCase()}.svg`} alt="" width={size} height={Math.round(size * 0.75)} loading="lazy" decoding="async" />

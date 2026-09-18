@@ -2,12 +2,15 @@
 import Base from '../../../layouts/Base.astro';
 import SectionHead from '../../../components/SectionHead.astro';
 import Consult from '../../../components/Consult.astro';
+import Flag from '../../../components/Flag.astro';
+import BranchMap from '../../../components/BranchMap.astro';
 import { ui, langs, type Lang } from '../../../i18n/ui';
 import { pages } from '../../../i18n/pages';
 import { branches, CONTACT, SITE } from '../../../data/site';
 export const getStaticPaths = () => langs.map((lang) => ({ params: { lang } }));
 const lang = Astro.params.lang as Lang; const t = ui[lang]; const c = pages[lang].contact; const home = `/${lang}/`;
 const countries = [...new Set(branches.map((b) => b.country))];
+const countryFlag: Record<string, string> = { Jordan: 'JO', Iraq: 'IQ', Egypt: 'EG', 'Saudi Arabia': 'SA', Qatar: 'QA', UAE: 'AE', Kuwait: 'KW', Turkey: 'TR', Cyprus: 'CY' };
 const tel = (s: string) => s.replace(/[^\d+]/g, '');
 const ld = { '@context': 'https://schema.org', '@type': 'ContactPage', name: c.meta, url: `${SITE.url}${home}contact-us/`, mainEntity: { '@id': `${SITE.url}/#org`, telephone: CONTACT.phones[0], email: CONTACT.email, address: { '@type': 'PostalAddress', streetAddress: '14 King Faisal Bin Abdulaziz Street, Umm Uthaina', addressLocality: 'Amman', addressCountry: 'JO' } } };
 ---
@@ -34,9 +37,10 @@ const ld = { '@context': 'https://schema.org', '@type': 'ContactPage', name: c.m
   <section class="sec tone-mist">
     <div class="container">
       <SectionHead tag={pages[lang].about.branchesTag} title={c.branchesTitle} text={c.branchesText} />
+      <BranchMap lang={lang} title={c.mapTitle} />
       <div class="branch-grid wide rv">
-        {branches.map((b, i) => <div class:list={['branch rv-up', { hq: i === 0 }]} style={`--d:${0.1 + Math.min(i, 8) * 0.05}s`}>
-          <b>{b[lang]}</b>
+        {branches.map((b, i) => <div class:list={['branch rv-up', { hq: i === 0 }]} data-id={b.id} style={`--d:${0.1 + Math.min(i, 8) * 0.05}s`}>
+          <b><Flag code={countryFlag[b.country]} /> {b[lang]}</b>
           <span>{b.address[lang]}</span>
           <span class="branch-links" dir="ltr">{b.phones.map((ph) => <a href={`tel:${tel(ph)}`}>{ph}</a>)}{b.email && <a href={`mailto:${b.email}`}>{b.email}</a>}</span>
         </div>)}

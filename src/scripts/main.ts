@@ -17,6 +17,8 @@ const lazy: [string, () => Promise<void>][] = [
   ['#smart-passport', () => import('./passport').then((m) => m.initPassport())],
   ['#leadForm', () => import('./form').then((m) => m.initForm())],
   ['#piTool', () => import('./passport-index').then((m) => m.initPassportIndex())],
+  ['#branchMap', () => import('./branches').then((m) => m.initBranches())],
+  ['#roadmap', () => import('./roadmap').then((m) => m.initRoadmap())],
 ];
 for (const [sel, load] of lazy) {
   const el = document.querySelector(sel);

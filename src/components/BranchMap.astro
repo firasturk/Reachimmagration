@@ -1,0 +1,14 @@
+---
+// Animated 2D map of the region: countries with a Reach office are tinted, every branch is a pin, and routes are drawn
+// from the Amman head office when the map scrolls into view. Pins and the branch cards below highlight each other.
+// Drawing happens in scripts/branches.ts with d3-geo; without JS the section is simply the cards.
+import { type Lang } from '../i18n/ui';
+import { branches } from '../data/site';
+interface Props { lang: Lang; title: string }
+const { lang, title } = Astro.props;
+const pins = branches.map((b) => ({ id: b.id, lat: b.lat, lng: b.lng, country: b.country, name: b[lang].includes(' — ') ? b[lang].split(' — ')[1] : b[lang], city: b[lang].includes(' — ') ? b[lang].split(' — ')[1].split(/[,،] ?/)[0] : b[lang] }));
+---
+<div class="bm rv rv-up" id="branchMap" data-lang={lang} role="img" aria-label={title} style="--d:.2s">
+  <svg class="bm-svg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+  <script type="application/json" id="branchPins" set:html={JSON.stringify(pins)} />
+</div>

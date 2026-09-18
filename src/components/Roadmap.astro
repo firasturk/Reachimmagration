@@ -1,0 +1,29 @@
+---
+// Animated road map for the citizenship route: a path that draws itself as the visitor scrolls, with a milestone
+// lighting up at each stage. Nodes are placed on the path by scripts/roadmap.ts; without JS the list is simply visible.
+interface Props { tag: string; title: string[]; steps: { t: string; p: string }[]; lang: string }
+const { tag, title, steps, lang } = Astro.props;
+---
+<section class="sec sec-roadmap tone-ivory" id="roadmap" aria-labelledby="rmTitle">
+  <div class="container">
+    <div class="sec-head center rv">
+      <p class="sec-tag rv-side"><span class="mask"><span>{tag}</span></span></p>
+      <h2 id="rmTitle" class="sec-title rv-lines">{title.map((l, i) => <span class="mask"><span style={`--d:${0.06 + i * 0.09}s`}>{l}</span>{' '}</span>)}</h2>
+    </div>
+    <div class="rm" data-count={steps.length}>
+      <svg class="rm-svg rm-desk" viewBox="0 0 1200 360" preserveAspectRatio="none" aria-hidden="true">
+        <path class="rm-track" d="M40,250 C160,250 200,90 320,90 S480,250 600,250 S760,90 880,90 S1040,250 1160,250" pathLength="1" />
+        <path class="rm-line" d="M40,250 C160,250 200,90 320,90 S480,250 600,250 S760,90 880,90 S1040,250 1160,250" pathLength="1" />
+        <circle class="rm-marker" r="9" />
+      </svg>
+      <svg class="rm-svg rm-mob" viewBox="0 0 120 1000" preserveAspectRatio="none" aria-hidden="true">
+        <path class="rm-track" d="M30,20 C30,140 90,140 90,260 S30,380 30,500 S90,620 90,740 S30,860 30,980" pathLength="1" />
+        <path class="rm-line" d="M30,20 C30,140 90,140 90,260 S30,380 30,500 S90,620 90,740 S30,860 30,980" pathLength="1" />
+        <circle class="rm-marker" r="6" />
+      </svg>
+      <ol class="rm-steps">
+        {steps.map((s, i) => <li class="rm-node" style={`--i:${i}`}><span class="rm-dot" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span><div class="rm-card"><h3>{s.t}</h3><p>{s.p}</p></div></li>)}
+      </ol>
+    </div>
+  </div>
+</section>
