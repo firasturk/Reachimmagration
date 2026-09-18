@@ -203,7 +203,7 @@ dialog.picker::backdrop{background:rgba(20,10,14,.6);backdrop-filter:blur(8px);-
 .trail{inset:0;pointer-events:none;overflow:hidden}
 .trail .rm{width:0;height:0;will-change:transform}
 .trail .rm-i{left:0;top:0;will-change:transform,opacity;opacity:0}
-.trail svg{left:0;top:0;fill:var(--brand-accent);overflow:visible}
+.trail svg{left:0;top:0;max-width:none;fill:var(--brand-accent);overflow:visible} /* max-width:none — global.css caps every svg at 100% of its parent, and the motif's parent is a 0×0 point */
 
 
 /* ARABIC — the stage keeps its art-directed geometry (the footage is composed for it); copy blocks flip to the right edge of their boxes */

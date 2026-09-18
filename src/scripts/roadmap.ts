@@ -1,12 +1,12 @@
 // Road map: the line draws with scroll progress, each milestone lights when the line reaches it, a marker rides the tip.
 export function initRoadmap() {
-  const sec = document.getElementById('roadmap'); const rm = sec?.querySelector<HTMLElement>('.rm'); if (!sec || !rm) return;
-  const nodes = Array.from(rm.querySelectorAll<HTMLElement>('.rm-node')); const n = nodes.length;
+  const sec = document.getElementById('roadmap'); const rm = sec?.querySelector<HTMLElement>('.road'); if (!sec || !rm) return;
+  const nodes = Array.from(rm.querySelectorAll<HTMLElement>('.road-node')); const n = nodes.length;
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches; const mobile = matchMedia('(max-width: 819px)');
   const rtl = document.documentElement.dir === 'rtl';
 
   const layout = () => {
-    const svg = rm.querySelector<SVGSVGElement>(mobile.matches ? '.rm-mob' : '.rm-desk')!; const line = svg.querySelector<SVGPathElement>('.rm-line')!;
+    const svg = rm.querySelector<SVGSVGElement>(mobile.matches ? '.road-mob' : '.road-desk')!; const line = svg.querySelector<SVGPathElement>('.road-line')!;
     const vb = svg.viewBox.baseVal; const L = line.getTotalLength();
     nodes.forEach((node, i) => {
       const f = n === 1 ? 0 : i / (n - 1); const pt = line.getPointAtLength(f * L);
@@ -18,7 +18,7 @@ export function initRoadmap() {
     return { line, svg, L };
   };
   let cur = layout();
-  const marker = () => rm.querySelector<SVGCircleElement>(mobile.matches ? '.rm-mob .rm-marker' : '.rm-desk .rm-marker')!;
+  const marker = () => rm.querySelector<SVGCircleElement>(mobile.matches ? '.road-mob .road-marker' : '.road-desk .road-marker')!;
 
   let progress = -1;
   const setProgress = (p: number) => {
