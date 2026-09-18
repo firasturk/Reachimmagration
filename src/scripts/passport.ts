@@ -15,7 +15,7 @@ export function initPassport() {
   let turned = 0;
 
   const settle = (leaf: HTMLElement) => {                            // back to the resting stack order
-    leaf.classList.remove('moving'); leaf.style.zIndex = ''; leaf.style.transitionDelay = ''; timers.delete(leaf);
+    leaf.classList.remove('moving'); leaf.style.zIndex = ''; leaf.style.removeProperty('--fan'); timers.delete(leaf);
   };
   const paint = (from: number) => {
     const forward = turned > from;
@@ -24,7 +24,7 @@ export function initPassport() {
       if (leaf.classList.contains('turned') !== should) {
         const k = Math.min(forward ? i - from : from - 1 - i, 8);      // position in the fan: 0 = first leaf to move
         const t = timers.get(leaf); if (t) window.clearTimeout(t);
-        leaf.style.transitionDelay = `${k * STEP}ms`;
+        leaf.style.setProperty('--fan', `${k * STEP}ms`);            // fan delay as a variable: the phone's opacity fade keeps its own offset
         leaf.style.zIndex = String(300 + (forward ? count - i : i)); // in the air: above both stacks, in flight order
         leaf.classList.add('moving'); leaf.classList.toggle('turned', should);
         timers.set(leaf, window.setTimeout(() => settle(leaf), FLIP + k * STEP + 60));
@@ -33,6 +33,7 @@ export function initPassport() {
     });
     if (endPage) endPage.inert = turned !== count;
     book.dataset.turned = String(turned);
+    book.classList.toggle('at-end', turned === count);                  // the closing page exists only once every leaf is turned
     chips.forEach((c) => { const on = Number(c.dataset.jump) === turned; c.classList.toggle('on', on); c.setAttribute('aria-pressed', String(on)); });
     const on = chips.find((c) => Number(c.dataset.jump) === turned);
     if (on && strip) strip.scrollTo({ left: on.offsetLeft - strip.clientWidth / 2 + on.offsetWidth / 2, behavior: reduce ? 'auto' : 'smooth' });   // strip only, never the page

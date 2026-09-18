@@ -213,7 +213,7 @@ html[lang="ar"] .route h3{font-weight:600;line-height:1.3}
 .book-base,.leaf{position:absolute;top:0;width:50%;height:100%}
 .book-base.is-left{inset-inline-start:0}.book-base.is-right,.leaf{inset-inline-start:50%}
 .book[data-turned="0"] .book-base{visibility:hidden}
-.leaf{transform-style:preserve-3d;transform-origin:left center;transition:transform 1.15s var(--spring);cursor:pointer;z-index:calc(100 - var(--i))}
+.leaf{transform-style:preserve-3d;transform-origin:left center;transition:transform 1.15s var(--spring) var(--fan,0ms);cursor:pointer;z-index:calc(100 - var(--i))}
 [dir="rtl"] .leaf{transform-origin:right center}
 .leaf.turned{transform:rotateY(calc(var(--sgn)*-180deg));z-index:calc(var(--i) + 1)}
 .leaf.moving{will-change:transform} /* layer while in flight; the z-index of a moving leaf is set by passport.ts */
@@ -252,7 +252,8 @@ html[lang="ar"] .pp-details dt{letter-spacing:0;font-size:.9em}
 .pp-stamp strong{max-width:9ch;font:700 clamp(13px,1.7vw,19px)/1.08 var(--font-display);text-transform:uppercase}
 .pp-stamp-top,.pp-stamp-bottom{font:500 clamp(7px,.8vw,9.5px)/1.2 var(--font-display);letter-spacing:.14em;text-transform:uppercase;max-width:16ch}
 html[lang="ar"] .pp-stamp-top,html[lang="ar"] .pp-stamp-bottom{letter-spacing:0;font-size:clamp(9px,1vw,12px)}
-.pp-end{height:100%;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:10%}
+.pp-end{height:100%;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:10%;opacity:0;visibility:hidden;transition:opacity .4s,visibility 0s .4s}
+.book.at-end .pp-end{opacity:1;visibility:visible;transition:opacity .5s .55s,visibility 0s .55s} /* shown only once the last leaf has turned — never mid-flip */
 .pp-end h3{font:400 clamp(18px,2.3vw,26px)/1.1 var(--font-display);text-transform:uppercase;color:var(--brand-accent)}
 .pp-end p{font-size:clamp(12px,1.2vw,14.5px);line-height:1.45}
 .pp-end .btn{min-height:44px;padding:0 18px;font-size:14px;width:fit-content}
@@ -262,7 +263,7 @@ html[lang="ar"] .pp-stamp-top,html[lang="ar"] .pp-stamp-bottom{letter-spacing:0;
   .book{--pw:min(310px,80vw);width:var(--pw);aspect-ratio:125/176;translate:0 0!important}
   .book-base,.leaf{width:100%;inset-inline-start:0!important}
   .book-base.is-left,.face.back{display:none}
-  .leaf.turned{opacity:0;pointer-events:none;transition:transform 1.15s var(--spring),opacity .5s ease .45s}
+  .leaf.turned{opacity:0;pointer-events:none;transition:transform 1.15s var(--spring) var(--fan,0ms),opacity .5s ease calc(.45s + var(--fan,0ms))}
   .pp-details h3{font-size:30px}.pp-details dl{font-size:14px}.pp-details header{font-size:11px}.pp-mrz{font-size:9px}
   .pp-cover p{font-size:14px}.pp-end h3{font-size:26px}.pp-end p{font-size:15px}
 }
