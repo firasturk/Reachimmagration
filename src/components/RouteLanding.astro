@@ -31,7 +31,7 @@ const ld = { '@context': 'https://schema.org', '@type': 'ItemList', itemListElem
     <div class="container">
       <div class="sec-head rv"><h2 class="sec-title sm rv-lines"><span class="mask"><span>{r.compare}</span></span></h2></div>
       <ul class="prog-grid compact rv" role="list">{list.map((p, i) => <ProgramCard p={p} lang={lang} i={i} />)}</ul>
-      <p class="cta-row"><a class="btn btn-ghost" href={`${home}programs/`}>{r.all}</a></p>
+      <p class="cta-row"><a class="btn btn-ghost" href={`${home}programs/`}>{r.all}</a>{type === 'citizenship' && <a class="btn btn-solid" href={`${home}passport-index/`}>{t.header.passportIndex}</a>}</p>
     </div>
   </section>
   <Consult lang={lang} />

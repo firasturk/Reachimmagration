@@ -11,7 +11,7 @@ const { lang } = Astro.props; const t = ui[lang].footer; const home = `/${lang}/
       <p>{t.about}</p>
       <p class="ft-iso">{t.iso}</p>
     </div>
-    <nav aria-label={t.explore}><h2>{t.explore}</h2><a href={`${home}programs/`}>{t.programs}</a><a href={`${home}citizenship-by-investment/`}>{t.citizenship}</a><a href={`${home}residency-by-investment/`}>{t.residency}</a><a href={`${home}#smart-map`}>{ui[lang].header.map}</a><a href={`${home}#smart-passport`}>{ui[lang].header.passport}</a></nav>
+    <nav aria-label={t.explore}><h2>{t.explore}</h2><a href={`${home}programs/`}>{t.programs}</a><a href={`${home}citizenship-by-investment/`}>{t.citizenship}</a><a href={`${home}residency-by-investment/`}>{t.residency}</a><a href={`${home}passport-index/`}>{ui[lang].header.passportIndex}</a><a href={`${home}#smart-map`}>{ui[lang].header.map}</a><a href={`${home}#smart-passport`}>{ui[lang].header.passport}</a></nav>
     <nav aria-label={t.company}><h2>{t.company}</h2><a href={`${home}about-us/`}>{t.about_l}</a><a href={SITE.reviewsUrl} rel="noopener" target="_blank">{t.testimonials}</a><a href={SITE.blogUrl} rel="noopener" target="_blank">{t.blog}</a><a href={`${home}contact-us/`}>{t.contact}</a></nav>
     <nav aria-label={t.follow}><h2>{t.follow}</h2>{socials.map((s) => <a href={s.url} rel="noopener" target="_blank">{s.name}</a>)}</nav>
   </div>

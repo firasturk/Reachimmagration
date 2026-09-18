@@ -1,0 +1,67 @@
+---
+// Passport Index: the ranking is rendered at build time from src/data/passport-index.json; the comparison runs in
+// scripts/passport-index.ts with the same JSON. Program passports link to their program page.
+import Base from '../../../layouts/Base.astro';
+import SectionHead from '../../../components/SectionHead.astro';
+import Consult from '../../../components/Consult.astro';
+import { ui, langs, type Lang } from '../../../i18n/ui';
+import { pages } from '../../../i18n/pages';
+import { programs, SITE } from '../../../data/site';
+import data from '../../../data/passport-index.json';
+export const getStaticPaths = () => langs.map((lang) => ({ params: { lang } }));
+const lang = Astro.params.lang as Lang; const t = ui[lang]; const p = pages[lang].passport; const home = `/${lang}/`;
+const bySlug = new Map(programs.map((pr) => [pr.iso2, pr]));
+const flag = (c: string) => String.fromCodePoint(...[...c.toUpperCase()].map((ch) => 0x1f1e6 + ch.charCodeAt(0) - 65));
+const byName = [...data.passports].sort((a, b) => a[lang].localeCompare(b[lang], lang));
+const fmt = new Intl.DateTimeFormat(lang === 'ar' ? 'ar' : 'en-GB', { month: 'long', year: 'numeric' });
+const defaults = { a: 'JO', b: 'GD' };
+const crumbs = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [[t.programs.breadcrumbHome, home], [p.title.join(' '), `${home}passport-index/`]].map(([name, u], i) => ({ '@type': 'ListItem', position: i + 1, name, item: `${SITE.url}${u}` })) };
+---
+<Base lang={lang} title={p.meta} description={p.desc} path="/passport-index/" jsonld={[crumbs]}>
+  <section class="sec sec-page-head">
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href={home}>{t.programs.breadcrumbHome}</a> / <span aria-current="page">{p.title.join(' ')}</span></nav>
+      <SectionHead tag={p.tag} title={p.title} text={p.text} level="h1" />
+      <p class="prog-updated">{p.updated}: <time datetime={data.updated}>{fmt.format(new Date(data.updated))}</time>. {p.source}</p>
+
+      <div class="pi-tool rv rv-up" id="piTool" data-lang={lang} data-home={home} data-yours={p.yours} data-second={p.second} data-programs={JSON.stringify(Object.fromEntries(programs.map((pr) => [pr.iso2, pr.slug])))} style="--d:.15s"
+        data-vf={p.vf} data-voa={p.voa} data-eta={p.eta} data-evisa={p.evisa} data-required={p.required} data-rank={p.rank} data-score={p.score} data-adds-none={p.addsNone} data-new-vf={p.newVf} data-new-voa={p.newVoa} data-new-eta={p.newEta} data-combined={p.combined} data-of={p.of} data-destinations={p.destinations} data-program={p.program} data-view={p.view}>
+        <div class="pi-pick">
+          <label class="field"><span>{p.yours}</span>
+            <select id="piA">{byName.map((x) => <option value={x.c} selected={x.c === defaults.a}>{flag(x.c)} {x[lang]}</option>)}</select></label>
+          <label class="field"><span>{p.second}</span>
+            <select id="piB">{byName.map((x) => <option value={x.c} selected={x.c === defaults.b}>{flag(x.c)} {x[lang]}</option>)}</select></label>
+        </div>
+        <div class="pi-cards" id="piCards" aria-live="polite"></div>
+        <div class="pi-gain" id="piGain"><h2 class="sec-title sm">{p.adds}</h2><div id="piGainBody"></div></div>
+        <noscript><p class="prog-updated">{lang === 'ar' ? 'أداة المقارنة تحتاج إلى JavaScript. الترتيب الكامل أدناه.' : 'The comparison needs JavaScript. The full ranking is below.'}</p></noscript>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec tone-mist">
+    <div class="container">
+      <div class="pi-head">
+        <h2 class="sec-title sm">{p.table}</h2>
+        <label class="field pi-search"><span class="sr-only">{p.search}</span><input type="search" id="piSearch" placeholder={p.search} autocomplete="off" /></label>
+      </div>
+      <div class="pi-table-wrap">
+        <table class="pi-table" id="piTable">
+          <thead><tr><th>{p.rank}</th><th>{lang === 'ar' ? 'الجواز' : 'Passport'}</th><th>{p.vf}</th><th>{p.voa}</th><th>{p.eta}</th><th>{p.score}</th></tr></thead>
+          <tbody>
+            {data.passports.map((x) => { const pr = bySlug.get(x.c); return (
+              <tr data-name={`${x.en} ${x.ar} ${x.c}`.toLowerCase()} data-code={x.c}>
+                <td class="pi-rank">{x.rank}</td>
+                <td class="pi-name"><span class="pi-flag" aria-hidden="true">{flag(x.c)}</span> <b>{x[lang]}</b>{pr && <a class="badge" href={`${home}programs/${pr.slug}/`}>{p.program}</a>}</td>
+                <td>{x.f}</td><td>{x.o}</td><td>{x.a}</td><td class="pi-score">{x.score}</td>
+              </tr>
+            ); })}
+          </tbody>
+        </table>
+        <p class="prog-updated" id="piEmpty" hidden>{p.noResults}</p>
+      </div>
+      <div class="pi-cta"><p>{p.cta}</p><a class="btn btn-solid" href="#consult">{p.ctaBtn}</a></div>
+    </div>
+  </section>
+  <Consult lang={lang} />
+</Base>

@@ -34,10 +34,13 @@ const ld = { '@context': 'https://schema.org', '@type': 'ContactPage', name: c.m
   <section class="sec tone-mist">
     <div class="container">
       <SectionHead tag={pages[lang].about.branchesTag} title={c.branchesTitle} text={c.branchesText} />
-      <div class="branch-grid rv">
-        {countries.map((co, i) => <div class:list={['branch rv-up', { hq: i === 0 }]} style={`--d:${0.1 + i * 0.05}s`}><b>{branches.find((b) => b.country === co)![lang].split(' — ')[0]}</b><span>{branches.filter((b) => b.country === co).map((b) => b[lang].split(' — ')[1] ?? b[lang]).join(' · ')}</span></div>)}
+      <div class="branch-grid wide rv">
+        {branches.map((b, i) => <div class:list={['branch rv-up', { hq: i === 0 }]} style={`--d:${0.1 + Math.min(i, 8) * 0.05}s`}>
+          <b>{b[lang]}</b>
+          <span>{b.address[lang]}</span>
+          <span class="branch-links" dir="ltr">{b.phones.map((ph) => <a href={`tel:${tel(ph)}`}>{ph}</a>)}{b.email && <a href={`mailto:${b.email}`}>{b.email}</a>}</span>
+        </div>)}
       </div>
-      <p class="prog-updated">{c.branchNote}</p>
     </div>
   </section>
   <Consult lang={lang} />

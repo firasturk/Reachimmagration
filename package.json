@@ -8,6 +8,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check": "astro check",
+    "passport-index": "node tools/build-passport-index.mjs",
     "preview:file": "astro build && node tools/preview.mjs en && node tools/preview.mjs ar"
   },
   "dependencies": {

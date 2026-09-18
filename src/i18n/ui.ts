@@ -37,7 +37,7 @@ const en = {
     text: 'Choose the country you are considering and we will tailor your consultation around it.',
     none: 'No country selected yet', selected: 'Selected:', go: 'Continue', close: 'Close',
   },
-  header: { programs: 'Programs', citizenship: 'Citizenship', residency: 'Residency', about: 'About', map: 'Smart Map', passport: 'Smart Passport', why: 'Why Reach', contact: 'Contact', cta: 'Free Consultation', lang: 'العربية', home: 'Reach Immigration — home' },
+  header: { programs: 'Programs', citizenship: 'Citizenship', residency: 'Residency', about: 'About', passportIndex: 'Passport Index', map: 'Smart Map', passport: 'Smart Passport', why: 'Why Reach', contact: 'Contact', cta: 'Free Consultation', lang: 'العربية', home: 'Reach Immigration — home' },
   map: {
     tag: '[ Smart Map ]', title: ['Explore', 'By Country'],
     text: 'Spin the globe or swipe the cards. Every pin is a program we advise on, and the ones marked licensed are countries where a government lists Reach as an authorised agent.',
@@ -139,7 +139,7 @@ const ar: typeof en = {
     text: 'اختر البلد الذي تفكّر فيه لنبني استشارتك حوله.',
     none: 'لم تختر بلداً بعد', selected: 'اخترت:', go: 'متابعة', close: 'إغلاق',
   },
-  header: { programs: 'البرامج', citizenship: 'الجنسية', residency: 'الإقامة', about: 'من نحن', map: 'الخريطة الذكية', passport: 'الجواز الذكي', why: 'لماذا ريتش', contact: 'تواصل معنا', cta: 'استشارة مجانية', lang: 'English', home: 'ريتش للهجرة — الرئيسية' },
+  header: { programs: 'البرامج', citizenship: 'الجنسية', residency: 'الإقامة', about: 'من نحن', passportIndex: 'مؤشر الجوازات', map: 'الخريطة الذكية', passport: 'الجواز الذكي', why: 'لماذا ريتش', contact: 'تواصل معنا', cta: 'استشارة مجانية', lang: 'English', home: 'ريتش للهجرة — الرئيسية' },
   map: {
     tag: '[ الخريطة الذكية ]', title: ['استكشف', 'حسب البلد'],
     text: 'أدِر الكرة الأرضية أو مرّر البطاقات. كل نقطة برنامج نقدّم الاستشارة فيه، والوجهات المعلَّمة بـ«وكيل معتمد» هي دول تُدرج حكوماتها ريتش ضمن وكلائها المعتمدين.',
