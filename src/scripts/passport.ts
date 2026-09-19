@@ -12,18 +12,29 @@ export function initPassport() {
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const FLIP = reduce ? 0 : 1150, STEP = reduce ? 0 : 45;            // must match .leaf transition in global.css
   const timers = new Map<HTMLElement, number>();
-  let turned = 0;
+  let turned = 0, lastFrom = 0;
 
+  // Only four leaves can ever be seen: the pair at the open spread, the pair that was open before a move, and whatever is
+  // in the air. Everything else is buried in a stack and is hidden outright, so the browser paints ~4 pages, not 21.
+  const cull = () => leaves.forEach((leaf, i) => {
+    const near = i === turned - 1 || i === turned || leaf.classList.contains('moving') || (timers.size > 0 && (i === lastFrom - 1 || i === lastFrom));
+    leaf.classList.toggle('far', !near);
+  });
   const settle = (leaf: HTMLElement) => {                            // back to the resting stack order
-    leaf.classList.remove('moving'); leaf.style.zIndex = ''; leaf.style.removeProperty('--fan'); timers.delete(leaf);
+    leaf.classList.remove('moving'); leaf.style.zIndex = ''; leaf.style.removeProperty('--fan'); timers.delete(leaf); cull();
   };
   const paint = (from: number) => {
-    const forward = turned > from;
+    const forward = turned > from; lastFrom = from;
+    const span = Math.abs(turned - from);
     leaves.forEach((leaf, i) => {
       const should = i < turned;
       if (leaf.classList.contains('turned') !== should) {
-        const k = Math.min(forward ? i - from : from - 1 - i, 8);      // position in the fan: 0 = first leaf to move
+        const seq = forward ? i - from : from - 1 - i, k = Math.min(seq, 8);   // position in the fan: 0 = first leaf to move
         const t = timers.get(leaf); if (t) window.clearTimeout(t);
+        if (span > 4 && seq >= 2 && seq < span - 2) {                   // long jump: only the outer pages fly, the middle of the
+          leaf.classList.add('snap'); leaf.classList.toggle('turned', should);   // stack changes side instantly and stays unpainted
+          window.setTimeout(() => leaf.classList.remove('snap'), 60); return;
+        }
         leaf.style.setProperty('--fan', `${k * STEP}ms`);            // fan delay as a variable: the phone's opacity fade keeps its own offset
         leaf.style.zIndex = String(300 + (forward ? count - i : i)); // in the air: above both stacks, in flight order
         leaf.classList.add('moving'); leaf.classList.toggle('turned', should);
@@ -31,6 +42,7 @@ export function initPassport() {
       }
       leaf.inert = i !== turned;                                       // only the page you can see takes focus
     });
+    cull();
     if (endPage) endPage.inert = turned !== count;
     book.dataset.turned = String(turned);
     book.classList.toggle('at-end', turned === count);                  // the closing page exists only once every leaf is turned

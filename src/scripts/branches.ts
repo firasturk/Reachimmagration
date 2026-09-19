@@ -24,6 +24,7 @@ export function initBranches() {
 
   const gLand = el('g', { class: 'bm-land' }, svg);
   for (const f of countries) {
+    const [[x0, y0], [x1, y1]] = path.bounds(f); if (x1 < 0 || y1 < 0 || x0 > W || y0 > H) continue;   // off the map: skip the path entirely
     const d = path(f); if (!d) continue;
     el('path', { d, class: OFFICE_ISO.has(String(f.id).padStart(3, '0')) ? 'bm-c on' : 'bm-c' }, gLand);
   }
@@ -78,6 +79,10 @@ export function initBranches() {
   for (const c of cards) { c.addEventListener('pointerenter', () => set([c.dataset.id!], true)); c.addEventListener('pointerleave', () => set([c.dataset.id!], false)); }
 
   // routes draw in once the map is on screen
-  const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { root.classList.add('drawn'); io.disconnect(); } }, { threshold: 0.35 });
-  io.observe(root);
+  // routes draw in once the map is on screen; the travelling dots and pulses only run while it stays on screen
+  let drawn = false;
+  new IntersectionObserver(([e]) => {
+    if (e.isIntersecting) { if (!drawn) { drawn = true; root.classList.add('drawn'); } root.classList.remove('idle'); svg.unpauseAnimations(); }
+    else { root.classList.add('idle'); svg.pauseAnimations(); }
+  }, { threshold: 0.2 }).observe(root);
 }

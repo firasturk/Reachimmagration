@@ -587,6 +587,7 @@ html[lang="ar"] .pi-cta p{font-weight:600}
 .bm.drawn .bm-pulse{animation:bm-pulse 2.4s ease-out infinite;animation-delay:calc(var(--i,0)*.25s)}
 .bm-pin.hq .bm-pulse{fill:var(--gold)}
 @keyframes bm-pulse{0%{transform:scale(.4);opacity:.55}100%{transform:scale(2.2);opacity:0}}
+.bm.idle .bm-pulse{animation-play-state:paused} /* off screen: nothing animates */
 .bm-label{font:500 14px/1 var(--font-body);fill:var(--wine-900);paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round;cursor:pointer}
 .bm-label.hqtag{font-size:11px;letter-spacing:1.4px;text-transform:uppercase;fill:var(--ink-2)}
 html[lang="ar"] .bm-label{font-family:var(--font-body-ar);font-size:15px}
@@ -630,16 +631,15 @@ html[lang="ar"] .road-card h3{font-weight:600;text-transform:none;font-size:18px
 @media (prefers-reduced-motion:reduce){.road{--p:1}.road-card,.road-dot{transition:none}.road-node .road-card{opacity:1}}
 
 /* SMART PASSPORT — richer pages: guilloché, silhouette, flag, inked stamp, entry stamps, figures, flag strip */
-.pp-defs{position:absolute;width:0;height:0;overflow:hidden}
-.pp-guil{position:absolute;inset:0;width:100%;height:100%;fill:var(--wine-500);opacity:.055;pointer-events:none}
+.pp-guil{position:absolute;inset:0;background:url(/images/passport-guilloche.webp) repeat;background-size:96px 96px;pointer-events:none} /* bitmap tile, opacity baked in (tools/build-guilloche.mjs) */
 .pp-sil{position:absolute;inset:8% 6% 6% 6%;width:88%;height:86%;fill:var(--wine-300);opacity:.16;pointer-events:none}
 .pp-flag{position:absolute;inset-inline-end:7%;top:7%;border-radius:4px;box-shadow:0 1px 3px rgba(60,30,40,.25)}
-.pp-entry{position:absolute;padding:5px 9px;border:1.5px solid var(--slate-500);color:var(--slate-500);font:600 clamp(7px,.75vw,9px)/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;rotate:var(--rot,-8deg);opacity:.32;mix-blend-mode:multiply;white-space:nowrap}
+.pp-entry{position:absolute;padding:5px 9px;border:1.5px solid var(--slate-500);color:var(--slate-500);font:600 clamp(7px,.75vw,9px)/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;rotate:var(--rot,-8deg);opacity:.3;white-space:nowrap}
 .pp-entry.e1{left:9%;top:12%}
 .pp-entry.e2{right:8%;bottom:11%;border-radius:999px;border-style:double;border-width:3px}
-.pp-stamp{color:var(--wine-600);mix-blend-mode:multiply;opacity:.9}
-.pp-stamp svg{fill:none;stroke:currentColor}
-.pp-stamp text.pp-arc{fill:currentColor;stroke:none;font:600 11px/1 var(--font-display);letter-spacing:.18em;text-transform:uppercase}
+.pp-stamp{color:var(--wine-600);opacity:.82}
+.pp-stamp svg{fill:none;stroke:currentColor;stroke-linecap:round}
+.pp-stamp text.pp-arc{fill:currentColor;stroke:none;font:600 11px/1 var(--font-display);letter-spacing:.18em;text-transform:uppercase;text-rendering:optimizeSpeed}
 html[lang="ar"] .pp-stamp text.pp-arc{letter-spacing:.02em;font-size:12.5px;font-family:var(--font-display-ar)}
 .pp-stamp strong{position:relative;font-size:clamp(12px,1.55vw,17px)}
 .pp-stamp .pp-stamp-bottom{position:relative}
@@ -657,8 +657,8 @@ html[lang="ar"] .pp-stamp text.pp-arc{letter-spacing:.02em;font-size:12.5px;font
 .face.back.paper::before{background:linear-gradient(270deg,rgba(60,30,40,.16),rgba(60,30,40,.05) 7%,transparent 16%)}
 [dir="rtl"] .face.paper::before{background:linear-gradient(270deg,rgba(60,30,40,.16),rgba(60,30,40,.05) 7%,transparent 16%)}
 [dir="rtl"] .face.back.paper::before{background:linear-gradient(90deg,rgba(60,30,40,.16),rgba(60,30,40,.05) 7%,transparent 16%)}
-.face{transition:box-shadow .6s}
-.leaf.moving .face{box-shadow:0 24px 50px -18px rgba(40,14,22,.55)}
+.leaf.far{visibility:hidden}
+.leaf.snap{transition:none!important} /* buried in a stack: passport.ts decides which four leaves can be seen */
 /* flag strip replaces the select */
 .pp-strip{display:flex;gap:6px;max-width:min(640px,70vw);overflow-x:auto;scrollbar-width:none;padding:6px 4px;scroll-snap-type:x proximity}
 .pp-strip::-webkit-scrollbar{display:none}

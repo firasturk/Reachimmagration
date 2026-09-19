@@ -24,45 +24,64 @@ export function initMap() {
   const isoSet = new Map(programs.map((p) => [p.iso, p]));
   const graticule = geoGraticule10();
   const projection = geoOrthographic().clipAngle(90).precision(0.5);
-  const path = geoPath(projection, ctx);
 
   let size = 0, dpr = 1, rot: [number, number] = [20, -18], active: P | null = null, filter = 'all';
   let anim: { from: [number, number]; to: [number, number]; t0: number; dur: number } | null = null;
   let dragging = false, lastX = 0, lastY = 0, moved = 0, idleAt = 0, inView = false, raf = 0, lastDraw = 0;
 
   const resize = () => {
-    const w = canvas.clientWidth; if (!w) return; dpr = Math.min(window.devicePixelRatio || 1, 2); size = w;
+    const w = canvas.clientWidth; if (!w) return; dpr = Math.min(window.devicePixelRatio || 1, 1.5); size = w;
     canvas.width = canvas.height = Math.round(w * dpr); projection.scale(w * 0.46).translate([w / 2, w / 2]);
+    drawSphere(); layerKey = '';
   };
   const visible = (p: P) => geoDistance([p.lng, p.lat], [-rot[0], -rot[1]]) < Math.PI / 2 - 0.05;
   const dim = (p: P) => filter !== 'all' && p.type !== filter;
 
-  const draw = (now: number) => {
-    const r = projection.scale(), c = size / 2; projection.rotate([rot[0], rot[1], 0]);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, size, size);
-    const g = ctx.createRadialGradient(c - r * 0.35, c - r * 0.4, r * 0.1, c, c, r);
+  // The globe is drawn in two layers. Everything that only changes with rotation, selection or filter (sphere with its
+  // blurred shadow, graticule, land, pins, label) lives on an offscreen canvas that is redrawn only when one of those
+  // changes; every frame just blits it and draws the pulse ring. An idle globe used to repaint 177 countries and a 54px
+  // blur 45 times a second — that was most of the page's scroll jank.
+  const sphere = document.createElement('canvas'), sctx = sphere.getContext('2d')!;
+  const layer = document.createElement('canvas'), lctx = layer.getContext('2d')!, lpath = geoPath(projection, lctx);
+  let layerKey = '';
+  const drawSphere = () => {
+    sphere.width = sphere.height = canvas.width; const r = projection.scale(), c = size / 2;
+    sctx.setTransform(dpr, 0, 0, dpr, 0, 0); sctx.clearRect(0, 0, size, size);
+    const g = sctx.createRadialGradient(c - r * 0.35, c - r * 0.4, r * 0.1, c, c, r);
     g.addColorStop(0, '#ffffff'); g.addColorStop(1, C.sea2);
-    ctx.beginPath(); ctx.arc(c, c, r, 0, 2 * Math.PI); ctx.fillStyle = g; ctx.shadowColor = 'rgba(58,68,78,.26)'; ctx.shadowBlur = 54; ctx.shadowOffsetY = 28; ctx.fill();
-    ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
-    ctx.beginPath(); path(graticule); ctx.strokeStyle = C.line; ctx.globalAlpha = 0.16; ctx.lineWidth = 0.6; ctx.stroke(); ctx.globalAlpha = 1;
+    sctx.beginPath(); sctx.arc(c, c, r, 0, 2 * Math.PI); sctx.fillStyle = g; sctx.shadowColor = 'rgba(58,68,78,.26)'; sctx.shadowBlur = 54; sctx.shadowOffsetY = 28; sctx.fill();
+  };
+  const drawLayer = () => {
+    layer.width = layer.height = canvas.width; projection.rotate([rot[0], rot[1], 0]);
+    lctx.setTransform(1, 0, 0, 1, 0, 0); lctx.drawImage(sphere, 0, 0); lctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    lctx.beginPath(); lpath(graticule); lctx.strokeStyle = C.line; lctx.globalAlpha = 0.16; lctx.lineWidth = 0.6; lctx.stroke(); lctx.globalAlpha = 1;
     for (const f of countries) {
       const p = isoSet.get(String(f.id).padStart(3, '0'));
-      ctx.beginPath(); path(f);
-      ctx.fillStyle = p ? (p === active ? C.active : dim(p) ? C.off : C.on) : C.land; ctx.fill();
-      ctx.strokeStyle = '#ffffff'; ctx.lineWidth = p === active ? 1.1 : 0.5; ctx.stroke();
+      lctx.beginPath(); lpath(f);
+      lctx.fillStyle = p ? (p === active ? C.active : dim(p) ? C.off : C.on) : C.land; lctx.fill();
+      lctx.strokeStyle = '#ffffff'; lctx.lineWidth = p === active ? 1.1 : 0.5; lctx.stroke();
     }
     for (const p of programs) {                                       // pins: the islands are too small to exist as shapes
       if (!visible(p)) continue; const xy = projection([p.lng, p.lat]); if (!xy) continue;
       const on = p === active, off = dim(p);
-      if (on && !reduce) { const k = (now / 1600) % 1; ctx.beginPath(); ctx.arc(xy[0], xy[1], 7 + k * 20, 0, 2 * Math.PI); ctx.strokeStyle = C.active; ctx.globalAlpha = 0.4 * (1 - k); ctx.lineWidth = 1.6; ctx.stroke(); ctx.globalAlpha = 1; }
-      ctx.beginPath(); ctx.arc(xy[0], xy[1], on ? 7 : 4.2, 0, 2 * Math.PI); ctx.fillStyle = off ? C.pinOff : on ? C.pin : C.on; ctx.fill();
-      ctx.lineWidth = on ? 2.5 : 1.6; ctx.strokeStyle = '#fff'; ctx.stroke();
+      lctx.beginPath(); lctx.arc(xy[0], xy[1], on ? 7 : 4.2, 0, 2 * Math.PI); lctx.fillStyle = off ? C.pinOff : on ? C.pin : C.on; lctx.fill();
+      lctx.lineWidth = on ? 2.5 : 1.6; lctx.strokeStyle = '#fff'; lctx.stroke();
       if (on) {
-        ctx.font = `500 13px ${getComputedStyle(document.body).fontFamily}`; const w = ctx.measureText(p.name).width + 20;
+        lctx.font = `500 13px ${getComputedStyle(document.body).fontFamily}`; const w = lctx.measureText(p.name).width + 20;
         const bx = Math.min(size - w - 6, Math.max(6, xy[0] - w / 2)), by = xy[1] - 42;
-        ctx.beginPath(); (ctx as any).roundRect ? (ctx as any).roundRect(bx, by, w, 26, 13) : ctx.rect(bx, by, w, 26); ctx.fillStyle = C.ink; ctx.fill();
-        ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(p.name, bx + w / 2, by + 13.5);
+        lctx.beginPath(); (lctx as any).roundRect ? (lctx as any).roundRect(bx, by, w, 26, 13) : lctx.rect(bx, by, w, 26); lctx.fillStyle = C.ink; lctx.fill();
+        lctx.fillStyle = '#fff'; lctx.textAlign = 'center'; lctx.textBaseline = 'middle'; lctx.fillText(p.name, bx + w / 2, by + 13.5);
       }
+    }
+  };
+  const draw = (now: number) => {
+    const key = `${rot[0].toFixed(2)}|${rot[1].toFixed(2)}|${active?.slug}|${filter}|${canvas.width}`;
+    if (key !== layerKey) { layerKey = key; drawLayer(); }
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height); ctx.drawImage(layer, 0, 0);
+    if (active && !reduce && visible(active)) {                        // the only thing that moves on an idle globe
+      projection.rotate([rot[0], rot[1], 0]); const xy = projection([active.lng, active.lat]); if (!xy) return;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0); const k = (now / 1600) % 1;
+      ctx.beginPath(); ctx.arc(xy[0], xy[1], 7 + k * 20, 0, 2 * Math.PI); ctx.strokeStyle = C.active; ctx.globalAlpha = 0.4 * (1 - k); ctx.lineWidth = 1.6; ctx.stroke(); ctx.globalAlpha = 1;
     }
   };
 
