@@ -35,7 +35,7 @@ npm run build      # الناتج بمجلد dist/
 | `api/lead.ts` | دالة Vercel بتستقبل الفورم وبتحوّله للـ CRM. |
 | `src/pages/[lang]/…` | الصفحات: `programs/` و `programs/[slug]/` و `citizenship-by-investment/` و `residency-by-investment/` و `about-us/` و `contact-us/` و `privacy-policy/` و `terms/`. المسارات نفسها بالإنجليزي والعربي. |
 | `vercel.json` | إعدادات Vercel + تحويلات (301) من روابط الموقع القديم (`/en/program/…`، `/en/apply-now/`…) للصفحات الجديدة. |
-| `src/components/Film.astro`، `Why.astro`، `Routes.astro`، `Stories.astro` | الأقسام اللي فيها فيديو وصور. الفيديوهات بـ `public/video/` والصور بـ `public/images/sections/`، وكلها مقصوصة من فيديوهات العميل نفسها. |
+| `src/components/Film.astro`، `Why.astro`، `Routes.astro`، `Stories.astro`، `Consult.astro` | الأقسام اللي فيها فيديو وصور. خلفية الفورم `public/video/consult-globe.mp4` (كرة بورسلان من Kling عبر حساب Magnific تبع العميل، الكليب مكرر للأمام ثم بالعكس عشان يعمل loop بدون قفزة) مع بوستر `consult-globe-poster.webp`. الفيديوهات بـ `public/video/` والصور بـ `public/images/sections/`، وكلها مقصوصة من فيديوهات العميل نفسها. |
 | `src/scripts/reveal.ts` | حركة النصوص: العناوين بماسكات (طلوع أو دخول من الجنب)، والفقرات بتنقسم لسطورها الحقيقية وكل سطر بيطلع لحاله. |
 | `src/scripts/media.ts` | فيديوهات الأقسام ما بتتحمّل إلا لما تقرّب من الشاشة، وبتشتغل بس وهي ظاهرة. |
 | `src/layouts/Base.astro` | الـ SEO: العنوان، الوصف، canonical، hreflang، Open Graph، JSON-LD. |

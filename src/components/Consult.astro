@@ -9,7 +9,8 @@ interface Props { lang: Lang }
 const { lang } = Astro.props; const t = ui[lang].consult; const v = ui[lang].vr;
 ---
 <section class="sec sec-consult" id="consult" aria-labelledby="consultTitle">
-  <img class="consult-bg" src="/images/sections/emblem.webp" alt="" width="1280" height="720" loading="lazy" decoding="async" />
+  <!-- porcelain globe loop (Kling, from the client's Magnific account). The clip is played forward then reversed so it loops without a jump; media.ts loads it near the viewport and plays it only while on screen. -->
+  <video class="consult-bg lazy-v" data-v="consultGlobe" data-src="/video/consult-globe.mp4" poster="/images/sections/consult-globe-poster.webp" muted loop playsinline preload="none" aria-hidden="true" width="1280" height="720"></video>
   <div class="container consult-grid">
     <div>
       <SectionHead tag={t.tag} title={t.title} text={t.text} id="consultTitle" />
