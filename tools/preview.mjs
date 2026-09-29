@@ -24,7 +24,7 @@ html = html.replace(/<link rel="preload"[^>]*>/g, '');
 const out = await build({ entryPoints: ['src/scripts/main.ts'], bundle: true, format: 'iife', minify: true, write: false, target: 'es2020',
   define: { 'import.meta.env.PUBLIC_LEAD_ENDPOINT': 'undefined' }, loader: { '.json': 'json' } });
 const js = out.outputFiles[0].text.replace(/<\/script>/g, '<\\/script>');
-const videos = { bg: 'preview-assets/hero-bg-preview.mp4', loop1: 'public/video/family-walk.mp4', loop2: 'public/video/family-pool.mp4', marina: 'public/video/marina.mp4', walkTall: 'public/video/family-walk-tall.mp4', poolTall: 'public/video/family-pool-tall.mp4' };
+const videos = { bg: 'preview-assets/hero-bg-preview.mp4', loop1: 'public/video/family-walk.mp4', loop2: 'public/video/family-pool.mp4', marina: 'public/video/marina.mp4', walkTall: 'public/video/family-walk-tall.mp4', poolTall: 'public/video/family-pool-tall.mp4', consultGlobe: 'public/video/consult-globe.mp4' };
 const V = Object.fromEntries(Object.entries(videos).map(([k, p]) => [k, uri(existsSync(p) ? p : 'public/video/hero-bg.mp4')]));
 const guard = `document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('a[href^="/"]');if(!a)return;e.preventDefault();var t=document.getElementById('pvToast');t.textContent=(document.documentElement.lang==='ar'?'هذا الرابط يفتح صفحة مستقلة في الموقع الفعلي: ':'On the real site this opens its own page: ')+a.getAttribute('href');t.hidden=false;clearTimeout(t._h);t._h=setTimeout(function(){t.hidden=true},2600)});`;
 html = html.replace(/<script type="module" src="\/_astro\/[^"]+"><\/script>/g, '');
