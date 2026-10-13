@@ -1,0 +1,24 @@
+# Cloudflare Pages redirects (generated from the same list as vercel.json). Splats keep the old site's program URLs alive.
+/  /en/  302
+/en/program  /en/programs/  301
+/en/program/  /en/programs/  301
+/ar/program  /ar/programs/  301
+/ar/program/  /ar/programs/  301
+/en/program/*  /en/programs/  301
+/ar/program/*  /ar/programs/  301
+/en/apply-now  /en/contact-us/  301
+/en/apply-now/  /en/contact-us/  301
+/ar/apply-now  /ar/contact-us/  301
+/ar/apply-now/  /ar/contact-us/  301
+/en/assessment-tool  /en/contact-us/  301
+/en/assessment-tool/  /en/contact-us/  301
+/ar/assessment-tool  /ar/contact-us/  301
+/ar/assessment-tool/  /ar/contact-us/  301
+/en/about  /en/about-us/  301
+/en/about/  /en/about-us/  301
+/ar/about  /ar/about-us/  301
+/ar/about/  /ar/about-us/  301
+/en/contact  /en/contact-us/  301
+/en/contact/  /en/contact-us/  301
+/ar/contact  /ar/contact-us/  301
+/ar/contact/  /ar/contact-us/  301

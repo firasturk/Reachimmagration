@@ -8,10 +8,12 @@ npm install
 npm run dev        # http://localhost:4321/en/
 npm run build      # الناتج بمجلد dist/
 ```
-## الرفع (GitHub ثم Vercel)
-1. GitHub: مستودع جديد فاضي، وبعدين **uploading an existing file** واسحب كل محتويات هالمجلد (بدون `node_modules` و `dist`) واعمل Commit.
-2. Vercel: **Add New → Project → Import** للمستودع، وبعدين **Deploy**. ما في إعدادات: `vercel.json` محدد Astro، و`package.json` محدد Node 22 (Astro 7 بده 22.12 أو أحدث).
-3. بعد أول رفع: حط `CRM_WEBHOOK_URL` بـ Settings → Environment Variables عشان الفورم يبعت، واربط الدومين.
+## الرفع (GitHub ثم Cloudflare Pages)
+1. Cloudflare Dashboard → **Workers & Pages → Create → Pages → Connect to Git** → اختار المستودع والفرع.
+2. إعدادات البناء: Framework preset **Astro**، Build command `npm run build`، Output directory `dist`. Node 22 بينقرأ من `.nvmrc` تلقائياً (أو حط متغير `NODE_VERSION=22`).
+3. بعد أول رفع: حط `CRM_WEBHOOK_URL` بـ Settings → Environment variables (Production + Preview) عشان الفورم يبعت، واربط الدومين من Custom domains.
+
+الملفات الخاصة بـ Cloudflare: `public/_redirects` (تحويلات روابط الموقع القديم)، `public/_headers` (الكاش)، `functions/api/lead.ts` (دالة الفورم). ملف `vercel.json` و`api/lead.ts` لسا موجودين لو رجعنا لـ Vercel؛ أي تغيير بالتحويلات أو الفورم لازم يصير بالنسختين.
 
 أي push جديد على GitHub بينشر لحاله.
 
@@ -32,9 +34,9 @@ npm run build      # الناتج بمجلد dist/
 | `src/components/SmartMap.astro` + `src/scripts/map.ts` | الخريطة الذكية: كرة أرضية (d3-geo على canvas) مربوطة بكاروسيل البلدان. |
 | `src/components/SmartPassport.astro` + `src/scripts/passport.ts` | الجواز الذكي: كتاب CSS 3D، كل صفحتين برنامج. بالعربي بينفتح من اليمين. صفحة الختم فيها نقشة من وردة البراند (`src/data/motifs.ts`)، وسلويت الدولة بينرسم وقت البناء من Natural Earth 50m، والعلم، وختم حبر (فلتر SVG)، وختمي دخول باهتين. صفحة التفاصيل بتسحب الحد الأدنى والمدة من `src/data/programs/` (أول جملة بس) ومدى الجواز من مؤشر الجوازات. التنقل بشريط أعلام. |
 | `src/components/Consult.astro` + `src/scripts/form.ts` | الفورم الذكي (4 خطوات). |
-| `api/lead.ts` | دالة Vercel بتستقبل الفورم وبتحوّله للـ CRM. |
+| `functions/api/lead.ts` | دالة Cloudflare Pages بتستقبل الفورم وبتحوّله للـ CRM (`api/lead.ts` نسخة Vercel من نفس المنطق). |
 | `src/pages/[lang]/…` | الصفحات: `programs/` و `programs/[slug]/` و `citizenship-by-investment/` و `residency-by-investment/` و `about-us/` و `contact-us/` و `privacy-policy/` و `terms/`. المسارات نفسها بالإنجليزي والعربي. |
-| `vercel.json` | إعدادات Vercel + تحويلات (301) من روابط الموقع القديم (`/en/program/…`، `/en/apply-now/`…) للصفحات الجديدة. |
+| `public/_redirects` + `public/_headers` | تحويلات (301) من روابط الموقع القديم (`/en/program/…`، `/en/apply-now/`…) وسياسة الكاش على Cloudflare. `vercel.json` نفس الشي لـ Vercel. |
 | `src/components/Film.astro`، `Why.astro`، `Routes.astro`، `Stories.astro`، `Consult.astro` | الأقسام اللي فيها فيديو وصور. خلفية الفورم `public/video/consult-globe.mp4` (كرة بورسلان من Kling عبر حساب Magnific تبع العميل، الكليب مكرر للأمام ثم بالعكس عشان يعمل loop بدون قفزة) مع بوستر `consult-globe-poster.webp`. الفيديوهات بـ `public/video/` والصور بـ `public/images/sections/`، وكلها مقصوصة من فيديوهات العميل نفسها. |
 | `src/scripts/reveal.ts` | حركة النصوص: العناوين بماسكات (طلوع أو دخول من الجنب)، والفقرات بتنقسم لسطورها الحقيقية وكل سطر بيطلع لحاله. |
 | `src/scripts/media.ts` | فيديوهات الأقسام ما بتتحمّل إلا لما تقرّب من الشاشة، وبتشتغل بس وهي ظاهرة. |
@@ -42,7 +44,7 @@ npm run build      # الناتج بمجلد dist/
 | `tools/preview.mjs` | أداة معاينة بس (ملف HTML واحد). مش جزء من الموقع. |
 
 ## لازم ينعمل قبل الإطلاق
-1. **الفورم:** حط `CRM_WEBHOOK_URL` بإعدادات Vercel. بدونه الدالة بترجع 501 عن قصد.
+1. **الفورم:** حط `CRM_WEBHOOK_URL` بإعدادات Cloudflare Pages (Environment variables). بدونه الدالة بترجع 501 عن قصد.
 2. **اللوجو:** هلأ كلمة REACH مكتوبة. بدنا SVG الأبيض والغامق، وكود الخمري الرسمي (`--brand-accent` بـ `src/styles/global.css`).
 2ب. **خط GE Dinar Two:** الـ CSS جاهز، بس الخط تجاري ومش مرفق. لازم ملفات WOFF2 المرخّصة تنحط بـ `public/fonts/` بالأسماء المذكورة بالـ README هناك. لحد وقتها العناوين العربية بتطلع بخط El Messiri (وبتظهر أخطاء 404 للخط بالكونسول، طبيعية).
 3. **مراجعة العميل لأرقام البرامج:** صفحات البرامج العشرين مكتوبة كاملة بـ `src/data/programs/` بأرقام إرشادية بتاريخ سبتمبر 2026 (والتاريخ مطبوع على الصفحة). لازم العميل يمرّ عليها ويأكد المبالغ والمدد قبل الإطلاق، وأي تعديل بيصير من نفس الملفات.
